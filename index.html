@@ -1614,6 +1614,12 @@ function makeChip(opts){
     c.classList.remove("dragging");zones.forEach(zz=>zz.el.classList.remove("hot"));
     start=null;draggingStarted=false;
   });
+  // keyboard: Enter/Space on a focused chip fires a click with detail 0 — pick it up
+  c.addEventListener("click",e=>{
+    if(e.detail!==0||c.classList.contains("spent"))return;
+    if(picked&&picked.el===c){unpick();}
+    else{unpick();picked={el:c,payload:c.payload};c.classList.add("picked");toast("Picked up — Tab to where it should go, then press Enter.");}
+  });
   return c;
 }
 function spend(chip){chip.classList.add("spent");}
@@ -1678,7 +1684,7 @@ function renderRail(){
 }
 let sceneToken=0;   // bumps on every go(); async scene code checks it before touching the DOM
 function go(i){
-  current=i;clearScene();sceneToken++;setReadout(null);
+  current=i;clearScene();sceneToken++;setReadout(null);if(typeof tipEl!=="undefined")tipEl.style.opacity=0;
   const s=SCENES[i];
   if(s.needsText&&!RUN.text){toast("Pick a training text first.","bad");return go(0);}
   $("#scenehead .eyebrow").textContent=s.eyebrow;
@@ -2305,7 +2311,7 @@ function findContrastPairs(model){
 let trainerTimer=null;const trainListeners=new Set();
 function onTrain(fn){trainListeners.add(fn);return ()=>trainListeners.delete(fn);}
 function emitTrain(){for(const fn of trainListeners){try{fn();}catch(e){console.error(e);}}}
-function stopTraining(){if(trainerTimer){clearTimeout(trainerTimer);trainerTimer=null;}}
+function stopTraining(){if(trainerTimer){clearTimeout(trainerTimer);trainerTimer=null;}if(typeof cheatTimer!=="undefined"&&cheatTimer){clearTimeout(cheatTimer);cheatTimer=null;}}
 
 function startTraining(){
   const cached=lsGet(storeKey("model"));
@@ -2345,7 +2351,9 @@ function startCheatTraining(){
   if(cached){try{RUN.cheat=TinyTransformer.deserialize(JSON.parse(cached));RUN.cheat.causal=false;RUN.cheatTrained=true;RUN.cheatProgress=1;emitTrain();return;}catch(e){lsDel(storeKey("cheat"));}}
   RUN.cheat=freshModel();RUN.cheat.causal=false;RUN.cheatLosses=[];
   const rng=mulberry32(CFG.batchSeed);let step=0;
+  const model=RUN.cheat;
   const tick=()=>{
+    if(RUN.cheat!==model){cheatTimer=null;return;}
     const t0=performance.now();
     while(step<CHEAT_CFG.steps&&performance.now()-t0<16){
       const {loss}=trainStep(RUN.cheat,RUN.ids,{batchSize:CFG.batch,lr:CHEAT_CFG.lr,rng});
