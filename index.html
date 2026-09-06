@@ -146,8 +146,9 @@ h3.sub .dims{font-family:var(--mono);letter-spacing:0;text-transform:none;color:
 .slot.gen{border-color:var(--k);background:var(--k-soft);cursor:pointer}
 .slot.gen:hover{box-shadow:0 0 0 3px var(--k-soft)}
 button.slot{font:inherit}
-.slots button.slot{cursor:pointer}
-.slots button.slot:hover{border-color:var(--accent)}
+.slots button.slot{cursor:default}
+.slots button.slot.tap{cursor:pointer}
+.slots button.slot.tap:hover{border-color:var(--accent)}
 .zone.slot.hot{box-shadow:0 0 0 2.5px var(--accent),0 0 18px var(--accent-ring)}
 
 /* -- rounds log (scene 1) -- */
@@ -182,7 +183,9 @@ button.slot{font:inherit}
 .vtable .vrow.bet .vt::after{content:" ← your bet";color:var(--q-ink);font-size:11px}
 
 /* -- strips -- */
-.strip{display:inline-flex;align-items:center;gap:8px;vertical-align:middle;--cell:18px}
+.strip{display:inline-flex;align-items:center;gap:8px;vertical-align:middle;--cell:18px;max-width:100%}
+.ghostrow,.rowbox,.vecrowx,.xrow,.krow,.pairside>div,.bowl,.resid{overflow-x:auto;overflow-y:hidden}
+#tip{position:fixed;z-index:130;pointer-events:none;background:var(--text);color:var(--bg);border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:12px;font-family:var(--mono);opacity:0;transition:opacity .12s;max-width:280px;white-space:pre-line;line-height:1.4}
 .strip .slab{font-family:var(--mono);font-size:12px;color:var(--text);white-space:pre;display:inline-flex;align-items:center;gap:6px;min-width:60px}
 .strip .scells{display:inline-grid;grid-auto-flow:column;gap:1.5px}
 .strip .sc{width:var(--cell);height:var(--cell);border-radius:3px;background:var(--mid);display:inline-block;transition:background .25s}
@@ -214,17 +217,20 @@ button.slot{font:inherit}
 .twins .ok{color:var(--good-ink);font-weight:600}
 .zone.xrow.hot{box-shadow:0 0 0 2.5px var(--accent)}
 .mat .cl.plain{writing-mode:horizontal-tb;transform:none;height:var(--cell);min-height:0;padding:0;justify-content:center;font-size:9.5px}
+.mat .cl.tap{cursor:pointer;border-radius:4px}
+.mat .cl.tap:hover{background:var(--accent-soft);color:var(--text)}
+@media (pointer:coarse){.mat .cl.plain.tap{height:auto;min-height:34px}}
 
 /* -- pouring (scene 4) -- */
 .pourboard{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-.pour{width:58px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 4px;border-radius:10px;border:1px solid var(--line-soft);background:var(--panel-2);transition:all .2s;position:relative}
+.pour{width:66px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 4px;border-radius:10px;border:1px solid var(--line-soft);background:var(--panel-2);transition:all .2s;position:relative}
 .pour .gauge{width:22px;height:70px;border-radius:6px;background:var(--panel-3);position:relative;overflow:hidden;cursor:pointer;border:1px solid var(--line-soft)}
 .pour .gauge i{position:absolute;left:0;right:0;bottom:0;height:0;background:var(--ink-hi);transition:height .25s}
 .pour .pv{font-family:var(--mono);font-size:11px;color:var(--muted);min-height:14px}
 .pour .pl{font-family:var(--mono);font-size:10px;color:var(--faint);text-align:center;line-height:1.2;max-width:54px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pour .pl span{color:var(--text)}
 .pour .pb{display:flex;gap:3px}
-.pour .pb button{width:22px;height:22px;border-radius:6px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-size:14px;line-height:1;padding:0}
+.pour .pb button{width:30px;height:30px;border-radius:6px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-size:14px;line-height:1;padding:0}
 .pour.has{border-color:var(--accent)}
 .pour.self{border-color:var(--q)}
 .pour.covered{background:repeating-linear-gradient(135deg,var(--panel-3) 0 4px,var(--panel-2) 4px 8px);opacity:.7}
@@ -358,7 +364,7 @@ span.r16{cursor:default}
   .rail16{grid-template-columns:repeat(8,1fr)}
   .tape .tapecells{grid-template-columns:repeat(8,1fr)}
   .strip{--cell:15px}
-  .pour{width:52px}
+  .pour{width:60px}
   .klab,.xlab{min-width:64px}
 }
 </style>
@@ -604,7 +610,7 @@ span.r16{cursor:default}
 /* -- generic two-column stage layout -- */
 .cols{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
 .cols>*{min-width:0}
-.card{min-width:0}
+.card{min-width:0;overflow-x:auto}
 .card.tall .matwrap{max-height:520px;overflow:auto}
 .cols.w2{grid-template-columns:1.2fr 1fr}
 .cols.w3{grid-template-columns:1fr 1.4fr}
@@ -706,8 +712,8 @@ input[type=range]{accent-color:var(--accent);width:100%}
         <h1></h1>
         <p class="lede"></p>
       </header>
-      <div id="coach"><span class="pin"></span><span id="coachtext"></span></div>
-      <section id="stage" aria-live="polite"></section>
+      <div id="coach" aria-live="polite" aria-atomic="true"><span class="pin"></span><span id="coachtext"></span></div>
+      <section id="stage"></section>
       <div id="readout" class="mono" hidden></div>
       <div id="nav">
         <button class="btn" id="backBtn">Back</button>
@@ -1524,14 +1530,27 @@ function coach(msg,win){
    explains WHY), or false (rejected silently).                             */
 let zones=[];      // {el, handler(payload, chipEl) -> true | "why not" | false, pad}
 let picked=null;   // chip picked via click
-function registerZone(zel,handler,pad){
+/* opts: {focusable:false} for reject-only decoys that should not be tab stops */
+function registerZone(zel,handler,pad,opts={}){
   zel.classList.add("zone");zones.push({el:zel,handler,pad:pad||0});
-  zel.addEventListener("click",()=>{if(picked&&picked.el!==zel){const p=picked;attemptDrop(zel,p.payload,p.el);} });
-  if(!zel.hasAttribute("tabindex"))zel.setAttribute("tabindex","0");
-  zel.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();zel.click();}});
+  const fromNested=e=>{const src=e.target.closest(".dragsrc,.chip");return src&&src!==zel&&zel.contains(src);};
+  zel.addEventListener("click",e=>{
+    if(fromNested(e))return;                       // a pick-up inside this zone is not a drop onto it
+    if(picked&&picked.el!==zel){const p=picked;attemptDrop(zel,p.payload,p.el);}
+  });
+  if(opts.focusable!==false){
+    if(!zel.hasAttribute("tabindex")||zel.getAttribute("tabindex")==="-1"){zel.dataset.prevTab=zel.getAttribute("tabindex")||"";zel.setAttribute("tabindex","0");}
+    zel.addEventListener("keydown",e=>{
+      if(e.key!=="Enter"&&e.key!==" ")return;
+      if(fromNested(e))return;
+      if(picked&&picked.el!==zel){e.preventDefault();e.stopImmediatePropagation();const p=picked;attemptDrop(zel,p.payload,p.el);}
+    });
+  }
 }
-function unregisterZone(zel){zones=zones.filter(z=>z.el!==zel);zel.classList.remove("zone","hot");}
-function clearScene(){zones=[];picked=null;}
+function unregisterZone(zel){zones=zones.filter(z=>z.el!==zel);zel.classList.remove("zone","hot");if(zel.dataset.prevTab!==undefined){if(zel.dataset.prevTab==="")zel.removeAttribute("tabindex");else zel.setAttribute("tabindex",zel.dataset.prevTab);delete zel.dataset.prevTab;}}
+let teardowns=[];                       // scene-level cleanups (timers, rAF loops, window listeners)
+function onTeardown(fn){teardowns.push(fn);}
+function clearScene(){zones=[];picked=null;for(const fn of teardowns){try{fn();}catch(e){console.error(e);}}teardowns=[];if(typeof REPAINTERS!=="undefined")REPAINTERS.clear();}
 function zoneAt(x,y){
   for(const z of zones){
     if(!document.body.contains(z.el))continue;
@@ -1651,7 +1670,9 @@ function makeDragSource(elm,payload,ghostHtml){
     start=null;dragging=false;
   };
   elm.addEventListener("pointerup",fin);
-  elm.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();if(picked&&picked.el===elm)unpick();else{unpick();picked={el:elm,payload};elm.classList.add("picked");toast("Picked up — now choose where it should go.");}}});
+  elm.addEventListener("keydown",e=>{if(e.key!=="Enter"&&e.key!==" ")return;e.preventDefault();
+    if(picked&&picked.el!==elm)return;            // something else is picked: the zone handler (if any) takes it
+    if(picked&&picked.el===elm)unpick();else{unpick();picked={el:elm,payload};elm.classList.add("picked");toast("Picked up — Tab to where it should go, then press Enter.");}});
   elm.addEventListener("pointercancel",()=>{if(ghost){ghost.remove();ghost=null;}start=null;dragging=false;zones.forEach(zz=>zz.el.classList.remove("hot"));});
 }
 
@@ -1675,7 +1696,9 @@ function renderRail(){
   SCENES.forEach((s,i)=>{
     if(s.grp!==lastGrp){ol.append(el("div","grp",s.grp));lastGrp=s.grp;}
     const li=el("li","step"+(i===current?" on":"")+(i<unlocked||doneFlags[i]?" done":""));
-    const b=el("button","",`<span class="dot">${s.dot||(i===0?"·":i)}</span><span class="lbl">${s.label}</span>`);
+    const b=el("button","",`<span class="dot" aria-hidden="true">${s.dot||(i===0?"·":i)}</span><span class="lbl">${s.label}</span>`);
+    b.setAttribute("aria-label",(i===0?"":"Step "+i+": ")+s.label+(i<unlocked||doneFlags[i]?" (done)":""));
+    if(i===current)b.setAttribute("aria-current","step");
     b.disabled=i>unlocked;
     b.addEventListener("click",()=>go(i));
     li.append(b);ol.append(li);
@@ -1731,15 +1754,18 @@ function cellInk(kind,t){ // readable text on top of a cell
   const strong=kind==="seq"?t>0.5:Math.abs(t)>0.62;
   return strong?rgbStr(PAL.bg):rgbStr(PAL.text);
 }
-matchMedia("(prefers-color-scheme:dark)").addEventListener("change",()=>{PAL.ready=false;});
-new MutationObserver(()=>{PAL.ready=false;}).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+const REPAINTERS=new Set();             // paint() functions of everything currently on screen
+function repaintAll(){PAL.ready=false;readPalette();for(const fn of REPAINTERS){try{fn();}catch(e){}}}
+matchMedia("(prefers-color-scheme:dark)").addEventListener("change",repaintAll);
+new MutationObserver(repaintAll).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
 
 /* ============================ tooltip ============================ */
 const tipEl=el("div","");tipEl.id="tip";
-Object.assign(tipEl.style,{position:"fixed",zIndex:130,pointerEvents:"none",background:"#151A24",color:"#E8ECF3",border:"1px solid #354056",borderRadius:"8px",padding:"6px 9px",fontSize:"12px",fontFamily:"var(--mono)",opacity:0,transition:"opacity .12s",maxWidth:"280px",whiteSpace:"pre-line",lineHeight:"1.4"});
 document.body.appendChild(tipEl);
+let tipNode=null;
+document.addEventListener("pointermove",()=>{if(tipNode&&!document.body.contains(tipNode)){tipNode=null;tipEl.style.opacity=0;}},{passive:true});
 function attachTip(node,fn){
-  const move=e=>{const txt=fn();if(!txt){tipEl.style.opacity=0;return;}tipEl.innerHTML=txt;tipEl.style.opacity=1;
+  const move=e=>{const txt=fn();if(!txt){tipEl.style.opacity=0;return;}tipNode=node;tipEl.innerHTML=txt;tipEl.style.opacity=1;
     const x=clamp(e.clientX+14,8,innerWidth-tipEl.offsetWidth-8),y=clamp(e.clientY+16,8,innerHeight-tipEl.offsetHeight-8);
     tipEl.style.left=x+"px";tipEl.style.top=y+"px";};
   node.addEventListener("pointerenter",move);node.addEventListener("pointermove",move);
@@ -1825,13 +1851,14 @@ function heatmap(M,opts={}){
     opts.cols.forEach((c,j)=>{const d=el("div","cl"+(opts.colsPlain?" plain":""),esc(showTok(String(c))));d.dataset.j=j;g.append(d);});
   }
   const rlabs=[],clabs=[...g.querySelectorAll(".cl")];
+  if(opts.onCol){clabs.forEach(c=>{c.classList.add("tap");c.tabIndex=0;c.setAttribute("role","button");c.setAttribute("aria-label","column "+c.dataset.j);c.addEventListener("click",()=>opts.onCol(+c.dataset.j,c));c.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();opts.onCol(+c.dataset.j,c);}});});}
   for(let i=0;i<R;i++){
     if(opts.rows){const d=el("div","rl",esc(showTok(String(opts.rows[i]))));d.dataset.i=i;g.append(d);rlabs.push(d);}
     cells.push([]);
     for(let j=0;j<C;j++){
       const d=el("div","c"+(opts.numbers?" num":"")+(opts.onCell?" pickable":""));
       d.dataset.i=i;d.dataset.j=j;g.append(d);cells[i].push(d);
-      if(opts.onCell){d.tabIndex=0;d.addEventListener("click",()=>opts.onCell(i,j,d));d.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();opts.onCell(i,j,d);}});}
+      if(opts.onCell){d.addEventListener("click",()=>opts.onCell(i,j,d));}
       attachTip(d,()=>{
         const v=state.M[i][j];
         if(state.mask&&state.mask(i,j))return (opts.tipMasked||"masked — a position may not look at the future");
@@ -1862,7 +1889,7 @@ function heatmap(M,opts={}){
       if(opts.numbers)d.textContent=kind==="seq"?(v>=0.995?"1":v.toFixed(digits).replace(/^0/,"")):fmt(v,digits);
     }
   }
-  paint();
+  paint();REPAINTERS.add(paint);
   function setMask(fn){state.mask=fn;paint();}
   function update(M2,scale){state.M=M2;if(scale!=null)state.scale=scale;paint();}
   function highlight(i,j){rlabs.forEach(r=>r.classList.toggle("on",+r.dataset.i===i));clabs.forEach(c=>c.classList.toggle("on",+c.dataset.j===j));
@@ -1980,13 +2007,13 @@ function strip(vec,opts={}){
   if(opts.cell)cellsWrap.style.setProperty("--cell",opts.cell+"px");
   const cells=[];
   for(let j=0;j<n;j++){const d=el("span","sc"+(opts.onCell?" pickable":""));d.dataset.j=j;cellsWrap.append(d);cells.push(d);
-    if(opts.onCell){d.tabIndex=0;d.addEventListener("click",()=>opts.onCell(j,d));d.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();opts.onCell(j,d);}});}
+    if(opts.onCell){d.addEventListener("click",()=>opts.onCell(j,d));}
     attachTip(d,()=>opts.tip?opts.tip(j,state.vec[j]):`${opts.name||"value"}[${j}] = ${fmt(state.vec[j],3)}`);}
   wrap.append(cellsWrap);
   if(opts.index){const ix=el("span","sindex");for(let j=0;j<n;j++)ix.append(el("i","",String(j)));wrap.append(ix);}
   const state={vec,scale:opts.scale||maxAbs(vec)};
   function paint(){const s=state.scale||1;for(let j=0;j<n;j++){const t=clamp(state.vec[j]/s,-1,1);cells[j].style.background=state.vec[j]===0&&opts.zeroBlank?"":divColor(t);}}
-  paint();
+  paint();REPAINTERS.add(paint);
   return {el:wrap,cells,state,update(v,scale){state.vec=v;if(scale!=null)state.scale=scale;paint();},setScale(s){state.scale=s;paint();}};
 }
 /* a strip drawn on the sequential ramp (0..1): attention rows, probability rows */
@@ -2000,15 +2027,15 @@ function seqStrip(vec,opts={}){
   const state={vec,mask:opts.mask};
   function paint(){for(let j=0;j<n;j++){const d=cells[j];if(state.mask&&state.mask(j)){d.classList.add("masked");d.style.background="";continue;}d.classList.remove("masked");d.style.background=seqColor(state.vec[j]);}
     if(opts.sum){const s=state.vec.reduce((a,b)=>a+b,0);const ss=wrap.querySelector(".ssum");if(ss)ss.textContent="Σ = "+s.toFixed(3);}}
-  paint();
+  paint();REPAINTERS.add(paint);
   return {el:wrap,cells,state,update(v){state.vec=v;paint();},setMask(fn){state.mask=fn;paint();}};
 }
 /* the running example: 16 token tiles with slot indices; opts: {upto, card (cover > upto), focus, onTap(i), extra (17th token)} */
 function slotStrip(tokens,opts={}){
   const wrap=el("div","slots"+(opts.small?" small":""));
   const tiles=tokens.map((t,i)=>{
-    const d=el("button","slot"+(t==="\n"?" nl":""),`<span class="w">${esc(showTok(t))}</span><span class="i">${i}</span>`);
-    d.type="button";d.dataset.i=i;
+    const d=el("button","slot"+(t==="\n"?" nl":"")+(opts.onTap?" tap":""),`<span class="w">${esc(showTok(t))}</span><span class="i">${i}</span>`);
+    d.type="button";d.dataset.i=i;d.setAttribute("aria-label",`slot ${i}: ${t==="\n"?"line break":t}`);
     if(opts.onTap){d.addEventListener("click",()=>opts.onTap(i,d));}else{d.tabIndex=-1;}
     wrap.append(d);return d;
   });
@@ -2032,12 +2059,12 @@ const RC={
   x0(c,i,j){return `x₀[${i}][${j}] = E[${c.ids[i]}][${j}] + P[${i}][${j}] = ${F3(c.xTok[i][j])} + ${F3(c.xPos[i][j])} = <b>${F3(c.x0[i][j])}</b>`;},
   proj(c,m,name,i,j){const W=m.params["W"+name.toLowerCase()];const terms=c.x0[i].map((x,d)=>({a:x,b:W[d][j]}));return `${name}[${i}][${j}] = Σ<sub>d</sub> x₀[${i}][d]·W${name.toLowerCase()}[d][${j}] = ${sumTerms(terms,c[name][i][j])}`;},
   s(c,i,j){if(j>i)return `S[${i}][${j}] = −∞ (masked: slot ${j} is in slot ${i}'s future)`;const terms=c.Q[i].map((q,d)=>({a:q,b:c.K[j][d]}));const raw=terms.reduce((s,t)=>s+t.a*t.b,0);return `S[${i}][${j}] = q<sub>${i}</sub>·k<sub>${j}</sub> ÷ √16 = (${sumTerms(terms,raw)}) ÷ 4 = <b>${F3(c.S[i][j])}</b>`;},
-  a(c,i,j){if(j>i)return `A[${i}][${j}] = e<sup>−∞</sup> ÷ Σ = <b>0.000</b> (masked)`;let den=0;for(let k=0;k<=i;k++)den+=Math.exp(c.Smasked[i][k]-c.Smasked[i][i]);const num=Math.exp(c.Smasked[i][j]-c.Smasked[i][i]);return `A[${i}][${j}] = e<sup>S</sup> ÷ Σ<sub>k≤${i}</sub> e<sup>S[${i}][k]</sup> = ${F3(num)} ÷ ${F3(den)} = <b>${F3(c.A[i][j])}</b> <span class="dim">(scores shifted by the row max first — same answer, safer arithmetic)</span>`;},
+  a(c,i,j){if(j>i)return `A[${i}][${j}] = e<sup>−∞</sup> ÷ Σ = <b>0.000</b> (masked)`;const m=Math.max(...c.Smasked[i].slice(0,i+1));let den=0;for(let k=0;k<=i;k++)den+=Math.exp(c.Smasked[i][k]-m);const num=Math.exp(c.Smasked[i][j]-m);return `A[${i}][${j}] = e<sup>S[${i}][${j}]−m</sup> ÷ Σ<sub>k≤${i}</sub> e<sup>S[${i}][k]−m</sup> = ${F3(num)} ÷ ${F3(den)} = <b>${F3(c.A[i][j])}</b> <span class="dim">(m = the row's largest score, ${F3(m)}; subtracting it from every score leaves the shares unchanged and keeps e<sup>x</sup> small)</span>`;},
   c(c,i,j){const terms=[];for(let k=0;k<=i;k++)terms.push({a:c.A[i][k],b:c.V[k][j]});return `C[${i}][${j}] = Σ<sub>k</sub> A[${i}][k]·V[k][${j}] = ${sumTerms(terms,c.C[i][j])}`;},
   x1(c,i,j){return `x₁[${i}][${j}] = x₀[${i}][${j}] + (C·Wo)[${i}][${j}] = ${F3(c.x0[i][j])} + ${F3(c.attnOut[i][j])} = <b>${F3(c.x1[i][j])}</b>`;},
   h(c,i,j){return `h[${i}][${j}] = max(0, ${F3(c.pre[i][j])}) = <b>${F3(c.h[i][j])}</b>${c.pre[i][j]<0?' <span class="dim">(clipped)</span>':""}`;},
   x2(c,i,j){return `x₂[${i}][${j}] = x₁[${i}][${j}] + (h·W2)[${i}][${j}] = ${F3(c.x1[i][j])} + ${F3(c.mlpOut[i][j])} = <b>${F3(c.x2[i][j])}</b>`;},
-  p(c,i,id,vocab){const mx=Math.max(...c.logits[i]);let den=0;for(const l of c.logits[i])den+=Math.exp(l-mx);const num=Math.exp(c.logits[i][id]-mx);return `p[${i}][“${esc(showTok(vocab[id]))}”] = e<sup>logit</sup> ÷ Σ<sub>vocab</sub> e<sup>logit</sup> = ${F3(num)} ÷ ${F3(den)} = <b>${F3(c.probs[i][id])}</b>  (logit ${F3(c.logits[i][id])})`;},
+  p(c,i,id,vocab){const mx=Math.max(...c.logits[i]);let den=0;for(const l of c.logits[i])den+=Math.exp(l-mx);const num=Math.exp(c.logits[i][id]-mx);return `p[${i}][“${esc(showTok(vocab[id]))}”] = e<sup>logit−m</sup> ÷ Σ<sub>vocab</sub> e<sup>logit−m</sup> = ${F3(num)} ÷ ${F3(den)} = <b>${F3(c.probs[i][id])}</b>  (logit ${F3(c.logits[i][id])}, m = largest logit ${F3(mx)})`;},
   E(m,id,j,vocab){return `E[${id}][${j}] = <b>${F3(m.params.E[id][j])}</b> — row ${id} is the strip for “${esc(showTok(vocab[id]))}”; a parameter, random at birth`;},
   P(m,i,j){return `P[${i}][${j}] = <b>${F3(m.params.P[i][j])}</b> — the strip for slot ${i}, whatever word sits there`;},
 };
@@ -2050,14 +2077,14 @@ function segSwitch(options,onChange,initial=0){ // options: [{label, value}]
 }
 /* θ-switch: Newborn | Trained — disabled until `enabled`, and until the background model exists */
 function thetaSwitch(host,onChange){
-  const sw=segSwitch([{label:"Newborn",value:false},{label:RUN.trainDone?"Trained (by you)":"Peek: after training",value:true}],v=>{if(v&&!RUN.trained){toast("Still training in the background — a moment.");sw.set(0);return;}onChange(v);},RUN.trainDone?1:0);
+  const sw=segSwitch([{label:"Newborn",value:false},{label:RUN.trainDone?"Trained (by you)":"Peek: after training",value:true}],v=>{if(v&&!RUN.trained){toast("Still training in the background — a moment.");sw.set(0);return;}onChange(v);},0);
   const row=el("div","thetarow");row.append(el("span","tl","weights:"),sw.el);host.append(row);
   sw.enable(false);
   return sw;
 }
 function budgetBar(shares,opts={}){
   const wrap=el("div","budget");const bar=el("div","bb");wrap.append(bar);const lab=el("div","bl2","");wrap.append(lab);
-  function update(sh,labels){bar.innerHTML="";let sum=0;sh.forEach((s,j)=>{sum+=s;if(s<=0)return;const seg=el("i","",s>0.08?esc(showTok(labels?labels[j]:String(j))):"");seg.style.width=(s*100)+"%";seg.style.background=seqColor(0.25+0.6*(j%2?0.5:1)*Math.min(1,s+0.3));seg.style.color=cellInk("seq",0.5);seg.title=(labels?labels[j]:j)+": "+s.toFixed(3);bar.append(seg);});
+  function update(sh,labels){bar.innerHTML="";let sum=0;sh.forEach((s,j)=>{sum+=s;if(s<=0)return;const seg=el("i","",s>0.08?esc(showTok(labels?labels[j]:String(j))):"");const tt=0.25+0.6*(j%2?0.5:1)*Math.min(1,s+0.3);seg.style.width=(s*100)+"%";seg.style.background=seqColor(tt);seg.style.color=cellInk("seq",Math.pow(tt,0.8));seg.title=(labels?labels[j]:j)+": "+s.toFixed(3);bar.append(seg);});
     lab.innerHTML=`Σ = <b>${sum.toFixed(3)}</b>`;lab.classList.toggle("bad",Math.abs(sum-1)>0.002);}
   update(shares,opts.labels);
   return {el:wrap,update};
@@ -2112,7 +2139,7 @@ function wheel(probs,vocab,opts={}){
    One continuous story: the text the learner picks here is the text every
    later scene tokenizes, embeds, attends over, trains on and generates from. */
 const CFG={dModel:16,context:16,mlpHidden:32,batch:8,lr:3e-3,seed:42,steps:3000,batchSeed:1234};
-const CHEAT_CFG={steps:6000,lr:5e-3};          // the unmasked twin needs longer to become a crisp cheater
+const CHEAT_CFG={steps:CFG.steps,lr:CFG.lr};   // the unmasked twin is trained exactly like the real one
 const RUN={
   textId:null,text:"",title:"",author:"",
   tok:null,ids:[],vocab:[],V:0,
@@ -2152,7 +2179,7 @@ function setText(entry){
   Object.assign(RUN,{textId:entry.id,text,title:entry.title,author:entry.author||"",tok,ids,vocab:tok.vocab,V:tok.vocabSize,_succ:null,
     model:null,trained:false,progress:0,losses:[],curve:[],cheat:null,cheatTrained:false,cheatProgress:0,cheatLosses:[],pairs:null,
     guesses:{},handRow:null,betTop:null,trainDone:false,generated:null,chopped:false,fwd0:null,fwdStar:null,gen:{prompt:null,ids:[]}});
-  RUN.floors={uniform:Math.log(RUN.V),bigram:bigramEntropy(ids,RUN.V)};
+  RUN.floors={uniform:Math.log(RUN.V),unigram:unigramEntropy(ids),bigram:bigramEntropy(ids,RUN.V)};
   RUN.win=win;RUN.rounds=chooseRounds(win);
   RUN.probe={ids:win.ids.slice(0,CFG.context),tokens:win.tokens.slice(0,CFG.context)};
   RUN.paramCount=32*RUN.V+CFG.context*CFG.dModel+4*CFG.dModel*CFG.dModel+2*CFG.dModel*CFG.mlpHidden;
@@ -2238,6 +2265,9 @@ function bigramEntropy(ids,V){   // H(next | previous) in nats, from counts
   let H=0;const N=ids.length-1;
   for(const [k,c] of pair){const p=c/N,cond=c/prev.get(Math.floor(k/V));H-=p*Math.log(cond);}
   return H;
+}
+function unigramEntropy(ids){ // H(token) in nats: what "knowing which tokens are common" buys you
+  const c=new Map();for(const i of ids)c.set(i,(c.get(i)||0)+1);let h=0;for(const n of c.values()){const p=n/ids.length;h-=p*Math.log(p);}return h;
 }
 function rowEntropy(row){let h=0;for(const p of row)if(p>0)h-=p*Math.log(p);return h;}
 function meanAttnEntropy(model,ids){const A=model.forward(ids).A;return A.reduce((s,r)=>s+rowEntropy(r),0)/A.length;}
@@ -2524,8 +2554,8 @@ function vocabChips(host,opts={}){                        // a shelf of vocabula
   host.append(shelf);return shelf;
 }
 function callout(host,term,body,cls){const c=el("div","callout"+(cls?" "+cls:""));c.innerHTML=`<span class="term">${term}</span><p>${body}</p>`;host.append(c);return c;}
-function changeTextGuard(entry){
-  if(RUN.text&&RUN.textId!==entry.id&&unlocked>1){toast("New text — the later steps re-lock, because every number on them changes.");unlocked=1;doneFlags=[];saveProg();}
+function relockAfterTextChange(){
+  if(unlocked>1){toast("New text — the later steps re-lock, because every number on them changes.");unlocked=1;doneFlags=[];saveProg();}
 }
 
 const SCENES=[
@@ -2565,9 +2595,10 @@ const SCENES=[
       after.append(el("p","helper",`These ${CFG.context} tokens (and the one after them) are the running example of every step. Notice ${q(w.tok)} appears at slot ${w.i0} and again at slot ${w.f} — followed by ${q(w.a)} the first time and by ${q(w.b)} the second. Hold that thought.`));
     }
     function choose(t,cardEl){
-      changeTextGuard(t);
+      const changed=!!RUN.text&&RUN.text!==t.text.trim();
       const res=setText(t);
       if(!res.ok){toast(res.why,"bad");coach("Shorter and more repetitive learns faster — trim to the most repetitive paragraph, and make sure a word repeats with different words after it.");return;}
+      if(changed)relockAfterTextChange();
       cards.forEach(c=>c.classList.toggle("on",c.dataset.id===t.id));own.classList.toggle("on",t.id==="own");
       if(t.id==="own")ta.value=t.text;
       showWindow();renderModelCard();
@@ -2612,8 +2643,9 @@ const SCENES=[
         const gTxt=q(RUN.vocab[guess]),tTxt=q(RUN.vocab[truth]);
         let msg;
         if(round===0){const cnt=(successors().get(w.ids[k])||new Map()).get(truth)||0,n=[...(successors().get(w.ids[k])||new Map()).values()].reduce((a,b)=>a+b,0);
-          msg=guess===truth?`Yes — in this text ${q(w.tokens[k])} is followed by ${tTxt} ${cnt===n?"every single time":cnt+" of "+n+" times"} (${cnt}×). The previous word alone settles it.`
-            :`The text says ${tTxt}. You barely needed to think: in this text ${q(w.tokens[k])} is followed by ${tTxt} ${cnt===n?"every time":cnt+" of "+n+" times"} (${cnt}×). The previous word alone settles it.`;}
+          const tail=cnt===n?"The previous word alone settles it.":"The previous word alone narrows it down.";
+          msg=guess===truth?`Yes — in this text ${q(w.tokens[k])} is followed by ${tTxt} ${cnt===n?"every single time":cnt+" of "+n+" times"} (${cnt}×). ${tail}`
+            :`The text says ${tTxt}. ${cnt===n?"You barely needed to think: in":"In"} this text ${q(w.tokens[k])} is followed by ${tTxt} ${cnt===n?"every time":cnt+" of "+n+" times"} (${cnt}×). ${tail}`;}
         else if(round===1){
           msg=guess===truth?`Right — and not from ${q(w.tok)} alone: at slot ${w.i0}, ${w.d} slots back, the same word was followed by ${q(w.a)}. You used the words before it. You <b>looked back</b> — remember that.`
             :`It's ${tTxt}. Notice: the same word ${q(w.tok)} sits at slot ${w.i0}, ${w.d} slots back, followed by ${q(w.a)} — so ${q(w.tok)} alone can't decide what comes next. Only the words before it can narrow it down. Guessing here means <b>looking back</b> — remember that.`;}
@@ -2629,7 +2661,7 @@ const SCENES=[
         }else{
           RUN.guesses=results;saveRun();
           coach(`You won or lost by <b>looking back at the right words</b>. The next steps build a machine that can do that — then teach it where to look.`,true);
-          callout(stage,"next-token prediction",`One game, played at every slot: given the words so far, put odds on the next token. Your guesses were scored the way the model's will be — by <b>surprise</b>, −log p(truth): low when you gave the truth high odds, huge when you gave it none. The machine sees ${CFG.context} slots at a time: its <b>context window</b>.`);
+          callout(stage,"next-token prediction",`One game, played at every slot: given the words so far, put odds on the next token. The machine's guesses are scored by <b>surprise</b>, −log p(truth): low when it gave the truth high odds, huge when it gave it none. Your single-word guess is the extreme case — all your odds on one token. The machine sees ${CFG.context} slots at a time: its <b>context window</b>.`);
           markDone();
         }
         return true;
@@ -2652,7 +2684,6 @@ const SCENES=[
     for(const t of w.tokens){if(t==="\n"){if(cur.length)raw.push(cur);cur=[];raw.push(["\n"]);}else if(/^[a-z0-9]/.test(t)||!cur.length){if(cur.length&&/^[a-z0-9]/.test(t)){raw.push(cur);cur=[t];}else cur.push(t);}else cur.push(t);}
     if(cur.length)raw.push(cur);
     let glued=raw.filter(x=>x.length>1).length;
-    coach(`Some tiles are still glued to their punctuation — <b>${glued}</b> of them. Drag the scissors onto each one.`);
     const board=el("div","tiles");stage.append(board);
     const tiles=[];
     raw.forEach(parts=>{
@@ -2675,17 +2706,20 @@ const SCENES=[
         return true;
       },4);
     });
+    if(glued===0)coach(`Nothing is glued in this window — every tile is already one token (line breaks included). Before counting: which token will get <b>id 0</b>, the most common one? Tap a tile to bet.`);
+    else coach(`Some tiles are still glued to their punctuation — <b>${glued}</b> of ${glued===1?"them, one":"them"}. Drag the scissors onto each one.`);
     const shelf=el("div","shelf");shelf.append(el("div","shelf-label","tools"));
     shelf.append(makeChip({label:"scissors",sub:"split a tile",glyph:`<svg width="26" height="26" viewBox="0 0 24 24"><circle cx="6" cy="17" r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="6" cy="7" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8.5 15.5 20 4M8.5 8.5 20 20" stroke="var(--bad)" stroke-width="2.2" stroke-linecap="round"/></svg>`,payload:"scissors",ghostHtml:"✂"}));
     stage.append(shelf);
     const countBtn=el("button","btn primary","Count the whole text");countBtn.type="button";countBtn.disabled=true;
     const countRow=el("div","btnrow");countRow.append(countBtn);stage.append(countRow);
     let bet=null;
+    if(glued===0)betPhase();
     function betPhase(){
       board.querySelectorAll(".tile").forEach(t=>{t.classList.add("click");t.addEventListener("click",()=>{if(bet!=null)return;bet=t.parts[0];board.querySelectorAll(".tile").forEach(x=>x.classList.remove("on"));t.classList.add("on");countBtn.disabled=false;coach(`Your bet for id 0: ${q(bet)}. Now count.`);},{once:false});});
     }
     countBtn.addEventListener("click",()=>{
-      if(glued>0){const g=board.querySelector(".glued");toast(`${q(g.parts.join(""))} and ${q(g.parts[0])} would be two different tokens with two different strips of numbers — the model would have to learn twice what ${q(g.parts[0])} is. Punctuation gets its own token: cut it first.`,"bad");return;}
+      if(glued>0){const g=board.querySelector(".glued")||{parts:["…"]};toast(`${q(g.parts.join(""))} and ${q(g.parts[0])} would be two different tokens with two different strips of numbers — the model would have to learn twice what ${q(g.parts[0])} is. Punctuation gets its own token: cut it first.`,"bad");return;}
       if(bet==null){toast("Bet first: tap the tile you think will be id 0.","bad");return;}
       countBtn.disabled=true;
       const vocab=RUN.vocab,counts=RUN.tok.counts;
@@ -2721,7 +2755,7 @@ const SCENES=[
     const leftCol=el("div",""),rightCol=el("div","");cols.append(leftCol,rightCol);
     // E table
     const Ebox=el("div","card tall");Ebox.append(el("h3","",`the table E <span class="dims">${RUN.V} × ${D}</span>`));
-    const Eheat=heatmap(fresh.params.E,{kind:"div",rows:RUN.vocab,cell:14,legend:true,legendText:"blue − · red +",tip:(i,j,v)=>RC.E(modelFor(trained),i,j,RUN.vocab),onCell:(i,j)=>{setReadout(RC.E(modelFor(trained),i,j,RUN.vocab));toast("Start from the slot — the id chooses the row, not you.","bad");}});
+    const Eheat=heatmap(fresh.params.E,{kind:"div",rows:RUN.vocab,cell:14,legend:true,legendText:"blue − · red +",tip:(i,j,v)=>RC.E(modelFor(trained),i,j,RUN.vocab),onCell:(i,j)=>{setReadout(RC.E(modelFor(trained),i,j,RUN.vocab));if(!fetched.size)toast("Start from the slot — the id chooses the row, not you.");}});
     Ebox.append(Eheat.el);leftCol.append(Ebox);
     // strip + grid
     const s=slotStrip(w.tokens.slice(0,T),{onTap:(i,d)=>fetchRow(i)});rightCol.append(el("h3","sub","your 16 slots — tap to fetch"),s.el);
@@ -2751,7 +2785,7 @@ const SCENES=[
     function fetchRow(i){
       if(built[i])return;
       built[i]=true;fetched.add(i);
-      Eheat.rowHighlight(w.ids[i]);Eheat.cells[w.ids[i]][0].scrollIntoView({block:"nearest",behavior:REDUCED?"instant":"smooth"});
+      Eheat.rowHighlight(w.ids[i]);{const box=Ebox.querySelector(".matwrap"),cell=Eheat.cells[w.ids[i]][0];box.scrollTop+=cell.getBoundingClientRect().top-box.getBoundingClientRect().top-box.clientHeight/2;}
       paintRow(i);s.mark(i,"on");
       setReadout(`slot ${i} is ${q(w.tokens[i])} = id ${w.ids[i]} → row ${w.ids[i]} of E, copied into row ${i} of x₀`);
       if(fetched.has(w.i0)&&fetched.has(w.f)&&!fetchAll.done){twinsText();fetchAll.hidden=false;
@@ -2821,20 +2855,22 @@ const SCENES=[
       const u=used();total.innerHTML=`100% of your attention: <b>${u}%</b> spent${u<100?`, <b>${100-u}%</b> left`:""}`;total.classList.toggle("full",u===100);
     }
     function tap(i,dir){
+      if(done){toast("Your row is sealed as a bet — press Reset step to pour again.");return;}
       if(i>f){cells[i].classList.remove("deny");void cells[i].offsetWidth;cells[i].classList.add("deny");toast(`Under the card. Slot ${f} is guessing what comes <em>after</em> it — if it could peek ahead the game would be pointless. Nothing to the right ever counts.`,"bad");return;}
       if(dir>0&&used()>=100){toast("Only 100% to spend. Attention is a share-out, not a score sheet — take some back from another slot first.","bad");return;}
       if(dir<0&&pour[i]===0)return;
       pour[i]=clamp(pour[i]+dir*10,0,100);
       if(i===f&&dir>0&&!selfNoted){selfNoted=true;toast("A slot may look at itself — the machine often does.");}
       paint();
-      if(used()===100)finish();else if(done){unDone();done=false;}
+      if(used()===100)finish();
     }
     let done=false;
     function finish(){
       done=true;
       RUN.handRow=pour.map(x=>x/100);saveRun();
-      const top=argmax(pour);
-      coach(`That row — ${n} numbers summing to one, most of it on ${slotName(top)} — is exactly what the model must produce for <em>every</em> slot, from nothing but strips of numbers. Your row is sealed as a bet: we'll hold it up against the machine's later.`,true);
+      const mx=Math.max(...pour),tops=pour.map((v,i)=>v===mx?i:-1).filter(i=>i>=0);
+      const where=tops.length===1?`most of it on ${slotName(tops[0])}`:`${mx}% each on slots ${tops.join(", ")}`;
+      coach(`That row — ${n} numbers summing to one, ${where} — is exactly what the model must produce for <em>every</em> slot, from nothing but strips of numbers. Your row is sealed as a bet: we'll hold it up against the machine's later.`,true);
       if(!stage.querySelector(".callout"))callout(stage,"attention weights",`A row of non-negative numbers that sums to 1, one per slot the current slot may look at — everything to its left, plus itself. Slots to the right get nothing, ever: that is what <b>causal</b> means. You made one by hand; the machine has to compute one.`);
       markDone();
     }
@@ -2887,8 +2923,8 @@ const SCENES=[
         if(j>f)return `Under the card. Its score is set to −∞ so that in a moment it gets exactly 0 of the share-out.`;
         return dropOnKey(j);
       },4);
-      registerZone(qtag,p=>p==="query"?`Questions don't answer questions. A score is query × key — Q·K — nothing else.`:false,4);
-      registerZone(vtag,p=>p==="query"?`The value doesn't decide the score; it gets carried over later, in the proportion the score earns. Compare against keys.`:false,4);
+      registerZone(qtag,p=>p==="query"?`Questions don't answer questions. A score is query × key — Q·K — nothing else.`:false,4,{focusable:false});
+      registerZone(vtag,p=>p==="query"?`The value doesn't decide the score; it gets carried over later, in the proportion the score earns. Compare against keys.`:false,4,{focusable:false});
       if(j<=f)makeDragSource(ks.el,"key:"+j,`<span class="tag k" style="font-size:16px;padding:6px 10px">K<sub>${j}</sub></span>`);
     }
     right.append(klist);
@@ -2901,7 +2937,7 @@ const SCENES=[
     // raw x0 reject zone
     const rawRow=el("div","krow raw");rawRow.append(el("span","klab",`<span class="i">${f}</span><span class="t">raw x₀</span>`));
     const rawStrip=strip(fwd0().x0[f],{role:"x",tip:(j,v)=>`x₀[${f}][${j}] = ${F3(v)}`});rawRow.append(rawStrip.el,el("span","helper","← the raw strip, for reference"));
-    registerZone(rawStrip.el,p=>p==="query"?"Compare like with like: query against key. The raw strip isn't in the game any more.":false,4);
+    registerZone(rawStrip.el,p=>p==="query"?"Compare like with like: query against key. The raw strip isn't in the game any more.":false,4,{focusable:false});
     right.append(rawRow);
     // score row
     const scoreBox=el("div","card");scoreBox.append(el("h3","",`row ${f} of the scores S <span class="dims">S[${f}][j] = q<sub>${f}</sub>·k<sub>j</sub> ÷ 4</span>`));
@@ -2920,6 +2956,7 @@ const SCENES=[
     function paintScores(){const c=cur();const vals=c.S[f].map((v,j)=>scored.has(j)?v:0);const sc=Math.max(0.05,maxAbs(c.S[f].slice(0,n)));Srow.update([vals],sc);Srow.cells[0].forEach((d,j)=>{if(!scored.has(j)&&j<=f){d.style.background="";d.textContent="·";}});krows.forEach((r,j)=>{if(j<=f)r.sc.textContent=scored.has(j)?fmt(c.S[f][j],2):"·";});}
     function dropOnKey(j){
       if(beat===1){
+        if(scored.has(j))return `Slot ${j} is already scored — try another key.`;
         scored.add(j);manual++;showTape(j);paintScores();setReadout(RC.s(cur(),f,j));
         krows[j].row.classList.add("done");
         if(manual>=2&&scored.size<n){scoreAll.hidden=false;coach(`Two by hand. The tape shows how a score is made: 16 products, summed, divided by 4. Score the rest.`);}
@@ -2927,6 +2964,7 @@ const SCENES=[
         return true;
       }
       // beat 2: find the top key on the trained model
+      if(!trained)return "Flip the switch to <b>Peek: after training</b> first — the newborn's scores are noise, and they're already on the table.";
       const c=cur();const best=argmax(c.S[f].slice(0,n));showTape(j);
       if(j!==best){return `Not the top: slot ${j} scores ${fmt(c.S[f][j],2)}; slot ${best} scores ${fmt(c.S[f][best],2)}. Read the tape — agreement is warm tiles, cancellation is cool. Try again.`;}
       scored=new Set([...Array(n).keys()]);paintScores();krows.forEach((r,jj)=>{if(jj<=f)r.row.classList.add("done");});
@@ -2970,7 +3008,8 @@ const SCENES=[
     coach(`Rows ask, columns answer: cell (i, j) is slot i's query against slot j's key. Row <b>${r1}</b> is lit: tap the <em>first</em> column it may NOT see, then Confirm.`);
     const H=heatmap(c.S,{kind:"div",rows:w.tokens.slice(0,T),cols:[...Array(T).keys()],colsPlain:true,cell:20,legend:true,legendText:"blue − · red + · hatched = hidden by the card",
       tip:(i,j,v)=>doneRows.has(i)&&j>i?"−∞ (masked)":`S[${i}][${j}] = ${F3(v)}`,
-      onCell:(i,j)=>{setReadout(doneRows.has(i)&&j>i?`S[${i}][${j}] = −∞ (masked)`:RC.s(c,i,j));if(i!==rowsToDo[ri]){toast(`Row ${rowsToDo[ri]} is the one that's lit.`);return;}selected=j;H.highlight(i,j);}});
+      onCell:(i,j)=>{setReadout(doneRows.has(i)&&j>i?`S[${i}][${j}] = −∞ (masked)`:RC.s(c,i,j));if(ri>=rowsToDo.length)return;if(i!==rowsToDo[ri]){toast(`Row ${rowsToDo[ri]} is the one that's lit.`);return;}selected=j;H.highlight(i,j);},
+      onCol:j=>{if(ri>=rowsToDo.length)return;const i=rowsToDo[ri];selected=j;H.highlight(i,j);setReadout(j>i&&doneRows.has(i)?`S[${i}][${j}] = −∞ (masked)`:RC.s(c,i,j));}});
     H.setMask((i,j)=>doneRows.has(i)&&j>i);
     H.rowHighlight(r1);
     stage.append(H.el);
@@ -3015,7 +3054,7 @@ const SCENES=[
     const hand=RUN.handRow||new Array(T).fill(0).map((_,j)=>j<=f?1/n:0);
     const order=[...Array(n).keys()].sort((a,b)=>hand[b]-hand[a]||a-b);
     const X=order[0],Y=order.find(j=>j!==X&&j<=f)??(X>0?X-1:1);
-    let trained=false,beat=1,snapped=true;
+    let trained=false,beat=1,snapped=true,touchedOthers=false;
     const vals=S0.slice();
     coach(`Slot ${f} owns exactly <b>1.000</b> of attention. Right now it spreads it evenly — ${(1/n).toFixed(3)} each — because every score is ≈ 0. Push ${q(w.tokens[X])} (slot ${X}) above <b>0.5</b>.`);
     const grid=el("div","sliders");stage.append(grid);
@@ -3027,7 +3066,7 @@ const SCENES=[
       const sv=el("span","sv",j>f?"−∞":fmt(vals[j],2));
       const lamp=el("span","lamp");const lv=el("span","lv","");
       r.append(lab,inp,sv,lamp,lv);grid.append(r);rows.push({r,inp,sv,lamp,lv});
-      inp.addEventListener("input",()=>{if(beat===2&&j===Y){inp.value=vals[j];toast(`Hands off ${q(w.tokens[Y])}. Its share is decided by everyone else's scores as much as by its own — lower the others.`,"bad");return;}vals[j]=+inp.value;snapped=false;paint();check();});
+      inp.addEventListener("input",()=>{if(beat===2&&j===Y){inp.value=vals[j];toast(`Hands off ${q(w.tokens[Y])}. Its share is decided by everyone else's scores as much as by its own — lower the others.`,"bad");return;}if(beat===1&&j!==X)touchedOthers=true;vals[j]=+inp.value;snapped=false;if(doneFlags[current])unDone();paint();check();});
       if(j>f){r.addEventListener("click",()=>toast("−∞ can't be raised. e<sup>−∞</sup> = 0 — the card is absolute, not merely dim.","bad"));}
       lamp.addEventListener("click",()=>toast("You don't set weights directly. You set scores; softmax sets weights."));
     }
@@ -3036,38 +3075,39 @@ const SCENES=[
     const truthBox=el("div","helper");stage.append(truthBox);
     function softmaxVals(){const vis=vals.slice(0,n);const mx=Math.max(...vis);const e=vis.map(v=>Math.exp(v-mx));const s=e.reduce((a,b)=>a+b,0);const A=new Array(T).fill(0);for(let j=0;j<n;j++)A[j]=e[j]/s;return A;}
     function paint(){const A=softmaxVals();rows.forEach((r,j)=>{r.sv.textContent=j>f?"−∞":fmt(vals[j],2);r.lamp.style.background=seqColor(A[j]);r.lv.textContent=j>f?"0.000":A[j].toFixed(3);});budget.update(A,w.tokens);
-      const sc=fwd0().Smasked[f];truthBox.innerHTML=`the model's real row ${f} right now (newborn): ${sc.slice(0,n).map((v,j)=>`<span class="mono">${fmt(v,2)}</span>`).join(" · ")} → ${(1/n).toFixed(3)} each${snapped?"":" · <b>what-if values on screen</b>"}`;}
+      const cc=trained&&fwdStar()?fwdStar():fwd0();const sc=cc.Smasked[f];truthBox.innerHTML=`the model's real row ${f} (${trained?"trained":"newborn"}): ${sc.slice(0,n).map((v,j)=>`<span class="mono">${fmt(v,2)}</span>`).join(" · ")}${trained?"":` → ${(1/n).toFixed(3)} each`}${snapped?"":" · <b>what-if values on screen</b>"}`;}
     function check(){
       const A=softmaxVals();
-      if(beat===1&&A[X]>=0.5){beat=2;toast(`${q(w.tokens[X])} has ${A[X].toFixed(3)}. You never lowered anyone, yet they all dimmed — fixed budget.`,"good");coach(`Now get ${q(w.tokens[Y])} (slot ${Y}) to at least <b>0.2</b> — <em>without touching its slider</em>.`);rows[Y].r.classList.add("handsoff");}
+      if(beat===1&&A[X]>=0.5){beat=2;toast(touchedOthers?`${q(w.tokens[X])} has ${A[X].toFixed(3)} — whichever sliders you moved, the row still sums to 1.000: fixed budget.`:`${q(w.tokens[X])} has ${A[X].toFixed(3)}. You never lowered anyone, yet they all dimmed — fixed budget.`,"good");coach(`Now get ${q(w.tokens[Y])} (slot ${Y}) to at least <b>0.2</b> — <em>without touching its slider</em>.`);rows[Y].r.classList.add("handsoff");}
       else if(beat===2&&A[Y]>=0.2){beat=3;rows[Y].r.classList.remove("handsoff");toast(`${q(w.tokens[Y])} rose to ${A[Y].toFixed(3)} and you never touched it.`,"good");peekPhase();}
     }
     let sw=null,guessRow=null;
     function peekPhase(){
-      coach(`Weights are relative: a share is decided by the whole row. Now flip to <b>Peek: after training</b>: the sliders snap to the trained scores, but the lamps are hidden. Guess the top share, then reveal.`);
+      coach(`Weights are relative: a share is decided by the whole row. Now flip to <b>Peek: after training</b>: the sliders snap to the trained scores, but the weights are hidden. Guess the top share, then reveal.`);
       sw=thetaSwitch(stage,v=>{trained=v;
-        if(trained){const c=fwdStar();for(let j=0;j<n;j++){vals[j]=c.Smasked[f][j];rows[j].inp.value=clamp(vals[j],-4,4);rows[j].inp.disabled=true;}snapped=false;paint();rows.forEach((r,j)=>{if(j<=f){r.lamp.style.background="";r.lv.textContent="?";}});budget.update(new Array(T).fill(0));
+        if(trained){const c=fwdStar();const lo=Math.min(-4,Math.floor(Math.min(...c.Smasked[f].slice(0,n)))),hi=Math.max(4,Math.ceil(Math.max(...c.Smasked[f].slice(0,n))));
+          for(let j=0;j<n;j++){rows[j].inp.min=lo;rows[j].inp.max=hi;vals[j]=c.Smasked[f][j];rows[j].inp.value=vals[j];rows[j].inp.disabled=true;}snapped=false;if(doneFlags[current])unDone();paint();rows.forEach((r,j)=>{if(j<=f){r.lamp.style.background="";r.lv.textContent="?";}});budget.el.hidden=true;
           if(!guessRow){guessRow=el("div","card guess");const A=c.A[f];const jstar=argmax(A.slice(0,n));
             guessRow.innerHTML=`<h3>your guess for the top share <span class="dims">slot ${jstar} (${esc(showTok(w.tokens[jstar]))}) has the highest score, ${fmt(c.Smasked[f][jstar],2)}</span></h3>`;
             const rg=el("div","range");const gi=el("input");gi.type="range";gi.min=0;gi.max=1;gi.step=0.01;gi.value=0.5;const gv=el("b","",gi.value);rg.append(gi,gv);gi.addEventListener("input",()=>gv.textContent=(+gi.value).toFixed(2));
             const rev=el("button","btn small primary","Reveal");rev.type="button";guessRow.append(rg,rev);stage.insertBefore(guessRow,btns);
             rev.addEventListener("click",()=>{rev.disabled=true;gi.disabled=true;const g=+gi.value,Astar=A[jstar];
-              rows.forEach((r,j)=>{if(j<=f){r.lamp.style.background=seqColor(A[j]);r.lv.textContent=A[j].toFixed(3);}});budget.update(A,w.tokens);
+              rows.forEach((r,j)=>{if(j<=f){r.lamp.style.background=seqColor(A[j]);r.lv.textContent=A[j].toFixed(3);}});budget.el.hidden=false;budget.update(A,w.tokens);
               let den=0;for(let k=0;k<n;k++)den+=Math.exp(c.Smasked[f][k]-c.Smasked[f][jstar]);
               setReadout(RC.a(c,f,jstar));
               const second=[...Array(n).keys()].filter(j=>j!==jstar).sort((a,b)=>c.Smasked[f][b]-c.Smasked[f][a])[0];const gap=c.Smasked[f][jstar]-c.Smasked[f][second];
               if(g>Astar+0.12)toast(`You said ${g.toFixed(2)}; the real share is ${Astar.toFixed(2)}. The other ${n-1} visible slots still get e<sup>score</sup> each — the winner takes a share, not the pot.`);
-              else if(g<Astar-0.12)toast(`${g.toFixed(2)} is closer to a flat row (${(1/n).toFixed(2)}). The exponential rewards a lead of ${gap.toFixed(2)} more than that: the real share is ${Astar.toFixed(2)}.`);
+              else if(g<Astar-0.12)toast(`${g.toFixed(2)} is too low: a flat row would give ${(1/n).toFixed(2)}, the real share is ${Astar.toFixed(2)} — a lead of ${gap.toFixed(2)} in score is rewarded exponentially.`);
               else toast(`Close: ${g.toFixed(2)} vs the real ${Astar.toFixed(2)}.`,"good");
               coach(`A[${f}][${jstar}] = e<sup>${fmt(c.Smasked[f][jstar],2)}</sup> ÷ Σ = ${Astar.toFixed(3)}, and the row still sums to 1.000. Now <b>snap back</b> to the newborn's real scores — Next stays locked while what-if numbers are on screen.`);
               snap.classList.add("pulse");});}
-        }else{for(let j=0;j<n;j++){vals[j]=S0[j];rows[j].inp.value=vals[j];rows[j].inp.disabled=false;}snapped=true;paint();}
+        }else{for(let j=0;j<n;j++){rows[j].inp.min=-4;rows[j].inp.max=4;vals[j]=S0[j];rows[j].inp.value=vals[j];rows[j].inp.disabled=false;}snapped=true;budget.el.hidden=false;paint();}
       });
       whenTrained(stage,token,()=>sw.enable(true));
     }
     snap.addEventListener("click",()=>{
       if(sw&&sw.value===true)sw.set(0);trained=false;
-      for(let j=0;j<n;j++){vals[j]=S0[j];rows[j].inp.value=vals[j];rows[j].inp.disabled=false;}snapped=true;paint();snap.classList.remove("pulse");
+      for(let j=0;j<n;j++){rows[j].inp.min=-4;rows[j].inp.max=4;vals[j]=S0[j];rows[j].inp.value=vals[j];rows[j].inp.disabled=false;}snapped=true;budget.el.hidden=false;paint();snap.classList.remove("pulse");
       if(beat===3&&guessRow&&guessRow.querySelector("button").disabled){
         coach(`Snapped back: ${n} × ${(1/n).toFixed(3)}, a shrug. Rows sum to 1.000 always; the future gets 0.000 always. Training will change the scores — you'll do that in step 10.`,true);
         if(!stage.querySelector(".callout"))callout(stage,"softmax · attention weights",`A[i][j] = e<sup>S[i][j]</sup> ÷ Σ<sub>k</sub> e<sup>S[i][k]</sup>. Every weight is positive, the row sums to 1, a lead in score is rewarded exponentially, and e<sup>−∞</sup> = 0 takes care of the card. A share is decided by the whole row, never by one score alone.`);
@@ -3137,8 +3177,9 @@ const SCENES=[
       pourAll.hidden=true;woBtn.hidden=false;
       coach(trained?`Trained shares: the bowl leans toward the slots with the biggest weights. Now · Wo, then add back.`:`Even shares, so the bowl is almost a plain average of all ${n} values — a newborn attends to everyone equally, i.e. to no one. Now one more matrix: tap <b>· Wo</b>.`);
     }
+    let aoStrip=null;
     woBtn.addEventListener("click",()=>{woDone=true;woBtn.hidden=true;addBtn.hidden=false;const c=cur();
-      const ao=el("div","vecrowx");ao.append(el("span","lab2",`(C · Wo)[${f}]`),strip(c.attnOut[f],{role:"o",tip:(jj,v)=>`attn_out[${f}][${jj}] = ${F3(v)}`}).el);bowl.insertBefore(ao,brow);
+      const ao=el("div","vecrowx");aoStrip=strip(c.attnOut[f],{role:"o",tip:(jj,v)=>`attn_out[${f}][${jj}] = ${F3(v)}`});ao.append(el("span","lab2",`(C · Wo)[${f}]`),aoStrip.el);bowl.insertBefore(ao,brow);
       setReadout(`attn_out[${f}] = C[${f}] · Wo — the blend, rotated by one more learned matrix (${D}×${D}), ready to be added`);coach(`Now add it back to slot ${f}'s own strip.`);});
     function addBack(){
       added=true;addBtn.hidden=true;const c=cur();resid.hidden=false;resid.innerHTML=`<h3>the residual: x₁ = x₀ + attn_out <span class="dims">slot ${f}</span></h3>`;
@@ -3149,6 +3190,7 @@ const SCENES=[
       coach(`Slot ${f} is still ${q(w.tok)} at position ${f} — plus a blend of what came before. And all ${T} slots did this at the same moment, each with its own row.`,true);
       callout(stage,"value · blend · residual",`<span class="vtext">value</span> v = x₀·Wv (what I hand over) · <b>C = A·V</b>, a blend of values in the amounts the weights allow — never a copy of one slot · <b>residual</b> x₁ = x₀ + C·Wo: added, not swapped. Attention <em>moves information between slots</em>; it decides nothing by itself.`,"v");
       const sw=thetaSwitch(stage,v=>{trained=v;const c2=cur();poured.clear();bowlV=zeros(1,D)[0];for(let j=0;j<=f;j++){vrows[j].vs.update(c2.V[j],scaleV());vrows[j].amt.textContent=`× ${c2.A[f][j].toFixed(3)}`;pourIn(j);}
+        if(aoStrip)aoStrip.update(c2.attnOut[f]);{let md=0;for(let d=0;d<D;d++)md=Math.max(md,Math.abs(bowlV[d]-c2.C[f][d]));gauge.innerHTML=`poured <b>1.000</b> of 1.000 · matches the model's C[${f}] to ${md.toExponential(1)}`;}
         const md2=maxAbs(c2.attnOut[f]);resid.querySelector(".helper").textContent=`largest change to any cell: ${F3(md2)}.`;
         const strips=resid.querySelectorAll(".vecrowx");const sc2=maxAbs(c2.x0[f],c2.attnOut[f],c2.x1[f]);
         [c2.x0[f],c2.attnOut[f],c2.x1[f]].forEach((v,k)=>{strips[k].replaceWith((()=>{const r=el("div","vecrowx");r.append(el("span","lab2",["x₀["+f+"]","+ attn_out","= x₁["+f+"]"][k]),strip(v,{role:k===1?"o":"x",scale:sc2,onCell:jj=>setReadout(RC.x1(c2,f,jj))}).el);return r;})());});
@@ -3176,7 +3218,7 @@ const SCENES=[
     b1.addEventListener("click",()=>{b1.disabled=true;polish=1;b2.disabled=false;
       const r=el("div","vecrowx");const clipped=c.pre[f].filter(x=>x<=0).length;
       r.append(el("span","lab2",`h = relu(x₁·W1) <small>${H} cells</small>`),strip(c.h[f],{role:"o",cell:10,onCell:j=>setReadout(RC.h(c,f,j)),tip:(j,v)=>`h[${f}][${j}] = max(0, ${F3(c.pre[f][j])}) = ${F3(v)}`}).el);
-      pb.insertBefore(r,br);setReadout(RC.h(c,f,0));coach(`${clipped} of ${H} cells were negative and got clipped to zero — that clip is the only thing in the whole model that isn't multiply-and-add. Tap 2.`);});
+      pb.insertBefore(r,br);setReadout(RC.h(c,f,0));coach(`${clipped} of ${H} cells were negative and got clipped to zero. Apart from the two share-outs (softmax over scores, softmax over the final odds), that clip is the only thing in the whole model that isn't multiply-and-add. Tap 2.`);});
     b2.addEventListener("click",()=>{b2.disabled=true;polish=2;
       const r=el("div","vecrowx");r.append(el("span","lab2",`x₂ = x₁ + h·W2`),strip(c.x2[f],{role:"x",onCell:j=>setReadout(RC.x2(c,f,j))}).el);pb.insertBefore(r,br);
       const r2=el("div","vecrowx");r2.append(el("span","lab2",`logits = x₂ · Wout <small>${V} numbers</small>`),el("span","helper","one score per vocabulary token → softmax → the bars"));pb.insertBefore(r2,br);
@@ -3184,12 +3226,14 @@ const SCENES=[
     // bet + bars
     const bb=el("div","card");bb.append(el("h3","",`the newborn's odds for slot ${f+1} <span class="dims">p = softmax(x₂ · Wout)</span>`));
     const betZone=el("div","betzone",`<span class="tag q">bet</span><span class="bt2">what will the <em>trained</em> model pick? drop a token here</span>`);bb.append(betZone);
-    const bars=probBars(c.probs[f],{k:8,vocab:V<=8?RUN.vocab:RUN.vocab});bars.el.classList.add("hidden-until");bb.append(bars.el);
+    const bars=probBars(c.probs[f],{k:8,vocab:RUN.vocab});bars.el.classList.add("hidden-until");bb.append(bars.el);
     const rest=el("p","helper","");bb.append(rest);
     const reveal=el("button","btn small primary","Reveal the newborn's odds");reveal.type="button";reveal.disabled=true;bb.append(reveal);
     right.append(bb);
+    vocabChips(stage,{label:"vocabulary — drag your bet onto the bet slot (or click a token, then click the slot)"});
     registerZone(betZone,p=>{
       if(!p.startsWith("tok:"))return false;
+      if(revealed)return "The bet is sealed — the newborn's odds are already on the table.";
       if(polish<2)return "Run the polish first — the bet is made from x₂, not x₁ (two matrix multiplies and a clip at zero).";
       bet=+p.slice(4);betZone.classList.remove("pulse");betZone.innerHTML=`<span class="tag q">bet</span><span class="bt2">you bet the trained model will pick <b class="mono">${esc(showTok(RUN.vocab[bet]))}</b></span>`;
       RUN.betTop=bet;saveRun();reveal.disabled=false;
@@ -3210,7 +3254,7 @@ const SCENES=[
       rail.append(cellsRow,el("p","helper",`<b>${wrong} of 16</b> wrong. Mean surprise over the window — the <b>loss</b> — is <b>${L.toFixed(3)}</b> (a coin toss over ${V} tokens would score ln ${V} = ${Math.log(V).toFixed(2)}).`));
       stage.append(rail);
       coach(`The newborn gives about ${(1/V).toFixed(3)} to everything — it has never been told it is wrong. It guessed at every slot in the same pass: 16 training signals from one window. That gap is the loss, and closing it is the next step.`,true);
-      callout(stage,"feed-forward · logits · loss",`x₂ = x₁ + relu(x₁W1)W2 (a polish; the only non-linearity is the clip at zero) · <b>logits</b> = x₂ · Wout, one score per token · <b>p</b> = softmax(logits) · <b>loss</b> = mean −log p(truth) over the 16 slots. Lower loss = less surprised by the text.`);
+      callout(stage,"feed-forward · logits · loss",`x₂ = x₁ + relu(x₁W1)W2 (a polish; apart from the two softmaxes, the clip at zero is the model's only non-linearity) · <b>logits</b> = x₂ · Wout, one score per token · <b>p</b> = softmax(logits) · <b>loss</b> = mean −log p(truth) over the 16 slots. Lower loss = less surprised by the text.`);
       const note=el("div","thetarow");note.append(el("span","tl","weights:"),el("span","pill","Newborn"),el("span","helper","trained weights sealed until you train it — next step."));stage.append(note);
       markDone();
     });
@@ -3229,11 +3273,11 @@ const SCENES=[
     const g0=scratch.backward(c0,targets);
     function bigCell(M){let bi=0,bj=0,bv=-1;for(let i=0;i<M.length;i++)for(let j=0;j<M[i].length;j++)if(Math.abs(M[i][j])>bv){bv=Math.abs(M[i][j]);bi=i;bj=j;}return [bi,bj];}
     const dstar=argmax(c0.x2[f].map(Math.abs));
-    const eCell=bigCell(g0.E.map((r,i)=>i===w.ids[f]?r:r.map(()=>0)));const qCell=bigCell(g0.Wq);
+    const eCell=bigCell(g0.E.map((r,i)=>i===w.ids[f]?r:r.map(()=>0)));const oCell=bigCell(g0.Wo);
     const dials=[{key:"Wout",i:dstar,j:w.bId,name:`Wout[${dstar}][${q(w.b)}]`,why:`the cell that links the biggest entry of x₂[${f}] to the truth ${q(w.b)}`},
                  {key:"E",i:eCell[0],j:eCell[1],name:`E[${q(w.tok)}][${eCell[1]}]`,why:`one cell of ${q(w.tok)}'s own strip`},
-                 {key:"Wq",i:qCell[0],j:qCell[1],name:`Wq[${qCell[0]}][${qCell[1]}]`,why:`one of the 256 numbers that make queries`}];
-    coach(`Three of the model's <b>${N.toLocaleString()}</b> numbers, as sliders. Move each until the window's loss is <em>lower</em> than it started (${L0.toFixed(3)}). Both directions are allowed — find down.`);
+                 {key:"Wo",i:oCell[0],j:oCell[1],name:`Wo[${oCell[0]}][${oCell[1]}]`,why:`one of the 256 numbers that turn the blend back into a slot's strip`}];
+    coach(`Three of the model's <b>${N.toLocaleString()}</b> numbers, as sliders. Each is judged on its own: move it until the window's loss, with only that number changed, is <em>lower</em> than it started (${L0.toFixed(3)}). Both directions are allowed — find down.`);
     const cols=el("div","cols");stage.append(cols);const left=el("div",""),right=el("div","");cols.append(left,right);
     const dialBox=el("div","card");dialBox.append(el("h3","",`three numbers by hand <span class="dims">window loss, recomputed on every move</span>`));
     const lossLine=el("div","lossline",`loss now <b>${L0.toFixed(3)}</b> · started at ${L0.toFixed(3)}`);dialBox.append(lossLine);
@@ -3244,13 +3288,16 @@ const SCENES=[
       const inp=el("input");inp.type="range";inp.min=start-0.5;inp.max=start+0.5;inp.step=0.005;inp.value=start;
       const val=el("span","dv mono",F3(start));const gr=el("div","grad helper","");row.append(inp,val,gr);dialBox.append(row);
       let moved=false;
+      const solo=freshModel();                       // this dial alone, everything else at θ₀
       inp.addEventListener("input",()=>{
-        scratch.params[d.key][d.i][d.j]=+inp.value;val.textContent=F3(+inp.value);
-        const L=scratch.loss(scratch.forward(win16),targets);
-        lossLine.innerHTML=`loss now <b class="${L<L0?"ok":"warn"}">${L.toFixed(3)}</b> · started at ${L0.toFixed(3)}`;
-        if(!moved){moved=true;const g=g0[d.key][d.i][d.j];gr.innerHTML=`∂loss/∂w at the start = <b>${g>=0?"+":"−"}${Math.abs(g).toExponential(2)}</b> → ${g>0?"positive: <b>decrease</b> this number to go downhill":"negative: <b>increase</b> this number to go downhill"}`;}
-        if(L<L0-1e-6){if(!improved.has(k)){improved.add(k);row.classList.add("ok");toast(`${d.name}: loss ${L.toFixed(3)} < ${L0.toFixed(3)} — downhill.`,"good");}}
-        else if(L>L0+1e-6&&!row.classList.contains("ok")){row.classList.add("uphill");}
+        scratch.params[d.key][d.i][d.j]=+inp.value;solo.params[d.key][d.i][d.j]=+inp.value;val.textContent=F3(+inp.value);
+        const L=scratch.loss(scratch.forward(win16),targets);          // all three dials together
+        const Ls=solo.loss(solo.forward(win16),targets);               // this dial by itself
+        lossLine.innerHTML=`loss now <b class="${L<L0?"ok":"warn"}">${L.toFixed(3)}</b> with all three dials · started at ${L0.toFixed(3)}`;
+        if(!moved){moved=true;const g=g0[d.key][d.i][d.j];gr.innerHTML=`∂loss/∂w at the start = <b>${g>=0?"+":"−"}${Math.abs(g).toExponential(2)}</b> → ${g>0?"positive: <b>decrease</b> this number to go downhill":"negative: <b>increase</b> this number to go downhill"} · this dial alone: <span class="solo">${Ls.toFixed(3)}</span>`;}
+        const sp=gr.querySelector(".solo");if(sp)sp.textContent=Ls.toFixed(3);
+        if(Ls<L0-1e-6){row.classList.remove("uphill");if(!improved.has(k)){improved.add(k);row.classList.add("ok");toast(`${d.name} alone: loss ${Ls.toFixed(3)} < ${L0.toFixed(3)} — downhill.`,"good");}}
+        else if(Ls>L0+1e-6){row.classList.add("uphill");if(!d.warned){d.warned=true;toast(`${d.name} alone: loss rose to ${Ls.toFixed(3)} — uphill. The gradient's sign says which way is down.`);}}
         if(improved.size===3&&!unlocked1){unlocked1=true;unlockTrain();}
       });
     });
@@ -3289,11 +3336,11 @@ const SCENES=[
     let live=null,rng=null,step=0,running=false,raf=null,ema=null,pts=[],done=false,lastSnap=-1;
     function paintRail(cache){let wrong=0;for(let i=0;i<T;i++){const ok=argmax(cache.probs[i])===targets[i];if(!ok)wrong++;r16[i].className="r16 "+(ok?"ok":"no");r16[i].querySelector(".m").textContent=ok?"✓":"✗";}return wrong;}
     paintRail(c0);
-    function snapshot(){const cache=live.forward(win16);liveA.update(cache.A);rowIt.update(cache.A[f]);bars.update(cache.probs[f]);paintRail(cache);chart.update(pts);stepLine.textContent=`step ${step} / ${CFG.steps} · loss (smoothed) ${ema==null?"–":ema.toFixed(3)}`;}
+    function snapshot(){const cache=live.forward(win16);liveA.update(cache.A);rowIt.update(cache.A[f]);bars.update(cache.probs[f]);paintRail(cache);chart.update(pts);stepLine.textContent=`step ${step} / ${CFG.steps} · batch loss, smoothed: ${ema==null?"–":ema.toFixed(3)}`;}
     function unlockTrain(){hold.disabled=false;runAll.disabled=false;coach(`Downhill three times, by trial. The <b>gradient</b> gives the downhill direction for all ${N.toLocaleString()} numbers at once. Hold the button (or press <b>Run to the end</b>) and watch the row you poured get answered.`);
       live=freshModel();rng=mulberry32(CFG.batchSeed);step=0;pts=[];ema=null;}
     function frame(){
-      if(!running||done)return;
+      if(!running||done||token!==sceneToken)return;
       const t0=performance.now();
       while(step<CFG.steps&&performance.now()-t0<11){
         const {loss}=trainStep(live,RUN.ids,{batchSize:CFG.batch,lr:CFG.lr,rng});
@@ -3304,21 +3351,26 @@ const SCENES=[
       if(step>=CFG.steps){finish();return;}
       raf=requestAnimationFrame(frame);
     }
+    const onBlur=()=>stop();
+    onTeardown(()=>{running=false;if(raf)cancelAnimationFrame(raf);raf=null;window.removeEventListener("blur",onBlur);});
     function start(){if(done||hold.disabled)return;if(running)return;running=true;hold.classList.add("on");raf=requestAnimationFrame(frame);}
-    function stop(){running=false;hold.classList.remove("on");if(raf)cancelAnimationFrame(raf);raf=null;if(!done&&step>0&&step<300)coach(`Loss ${ema.toFixed(2)} — so far it has mostly learned which tokens are common. Keep going.`);}
+    function stop(){running=false;hold.classList.remove("on");if(raf)cancelAnimationFrame(raf);raf=null;if(autoRun){autoRun=false;runAll.textContent="Run to the end";}
+      if(!done&&step>0&&step<300&&token===sceneToken){const H1=RUN.floors.unigram,H2=RUN.floors.bigram;
+        coach(`Loss ${ema.toFixed(2)} — ${ema>H1?`not yet as good as just knowing which tokens are common (${H1.toFixed(2)})`:ema>H2?`already better than just knowing which tokens are common (${H1.toFixed(2)}), not yet at the previous-word floor (${H2.toFixed(2)})`:`already below the previous-word floor (${H2.toFixed(2)})`}. Keep going.`);}}
     hold.addEventListener("pointerdown",e=>{hold.setPointerCapture(e.pointerId);start();});
     hold.addEventListener("pointerup",stop);hold.addEventListener("pointercancel",stop);hold.addEventListener("lostpointercapture",stop);
     hold.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();start();}});
     hold.addEventListener("keyup",e=>{if(e.key===" "||e.key==="Enter")stop();});
-    window.addEventListener("blur",stop);
     let autoRun=false;
+    window.addEventListener("blur",onBlur);
     runAll.addEventListener("click",()=>{autoRun=!autoRun;runAll.textContent=autoRun?"Pause":"Run to the end";if(autoRun)start();else stop();});
     function finish(){
+      if(token!==sceneToken)return;
       done=true;running=false;hold.classList.remove("on");hold.disabled=true;runAll.disabled=true;runAll.textContent="Done";hold.textContent="Trained";
       snapshot();
       // the seeded replay should land exactly on the background model
       if(RUN.trained){let md=0;for(const k in live.params){const P=live.params[k],Q=RUN.model.params[k];for(let i=0;i<P.length;i++)for(let j=0;j<P[i].length;j++)md=Math.max(md,Math.abs(P[i][j]-Q[i][j]));}console.log("live replay vs background model: max |Δ| =",md);if(md>1e-9){RUN.model=live;RUN.fwdStar=null;RUN.pairs=findContrastPairs(RUN.model);}}
-      else{stopTraining();RUN.model=live;RUN.trained=true;RUN.progress=1;RUN.losses=[];finishTraining();}
+      else{stopTraining();RUN.model=live;RUN.trained=true;RUN.progress=1;RUN.losses=[];RUN.curve=pts.slice();lsSet(storeKey("model"),JSON.stringify({model:live.serialize({includeOptimizer:false}),losses:[],curve:RUN.curve}));finishTraining();}
       RUN.trainDone=true;saveRun();renderModelCard();
       const cache=RUN.model.forward(win16);const A=cache.A[f];const js=argmax(A.slice(0,f+1));const selfW=A[f];
       const top=argmax(cache.probs[f]);
@@ -3328,7 +3380,7 @@ const SCENES=[
       const corpus=corpusLoss(RUN.model,RUN.ids);
       const tog=segSwitch([{label:"Step 0",value:0},{label:"Now",value:1}],v=>{const cc=v?cache:c0;liveA.update(cc.A);rowIt.update(cc.A[f]);bars.update(cc.probs[f]);paintRail(cc);},1);
       const tr=el("div","thetarow");tr.append(el("span","tl","show:"),tog.el);liveBox.append(tr);
-      coach(`Loss on your window ${L0.toFixed(2)} → <b>${L.toFixed(2)}</b>; over the whole text ${corpus.toFixed(2)}${corpus<RUN.floors.bigram?`, below the ${RUN.floors.bigram.toFixed(2)} any previous-word-only table could reach — so it is using more than the previous word`:""}. Same strips, same card, same share-out — only the numbers changed. Every earlier step now shows the trained model.`,true);
+      coach(`Loss on your window ${L0.toFixed(2)} → <b>${L.toFixed(2)}</b>; over the whole text ${corpus.toFixed(2)}${corpus<RUN.floors.bigram?`, below the ${RUN.floors.bigram.toFixed(2)} any previous-word-only table could reach — so it is using more than the previous word`:""}. Same strips, same card, same share-out — only the numbers changed. Every earlier step can now show the trained model — flip its weights switch.`,true);
       callout(stage,"loss · gradient · training step",`The <b>gradient</b> is the direction in which all ${N.toLocaleString()} numbers should move to make the loss fall fastest — computed exactly, by the chain rule, from the same forward pass you took apart. One <b>training step</b> = ${CFG.batch} random windows, average the gradient, nudge every number a little (Adam: momentum plus a per-number step size). ${CFG.steps.toLocaleString()} steps. It stored no text; it moved numbers until the arithmetic reproduced this text's patterns.`);
       markDone();
     }
@@ -3336,7 +3388,7 @@ const SCENES=[
       coach(`You already trained this model. Here is the finished run again.`,true);
       hold.disabled=true;runAll.disabled=true;dialBox.querySelectorAll("input").forEach(i=>i.disabled=true);
       live=RUN.model;step=CFG.steps;pts=RUN.curve.map(p=>({x:p.x,y:p.y}));ema=pts.length?pts[pts.length-1].y:null;done=true;
-      const cache=RUN.model.forward(win16);liveA.update(cache.A);rowIt.update(cache.A[f]);bars.update(cache.probs[f]);paintRail(cache);chart.update(pts);stepLine.textContent=`step ${CFG.steps} / ${CFG.steps}`;
+      const cache=RUN.model.forward(win16);liveA.update(cache.A);rowIt.update(cache.A[f]);bars.update(cache.probs[f]);paintRail(cache);chart.update(pts);stepLine.textContent=`step ${CFG.steps} / ${CFG.steps} · whole-text loss ${ema==null?"":ema.toFixed(3)}`;
       const A=cache.A[f];const js=argmax(A.slice(0,f+1));const top=argmax(cache.probs[f]);
       bet1.querySelector(".j").innerHTML=`now: slot ${f} gives <b>${A[js].toFixed(2)}</b> to ${slotName(js)}`;bet2.querySelector(".j").innerHTML=`now: top pick ${q(RUN.vocab[top])} at <b>${cache.probs[f][top].toFixed(2)}</b>`;
       markDone();
@@ -3354,10 +3406,11 @@ const SCENES=[
     const go2=()=>{
       const cache=RUN.model.forward(w.ids.slice(0,T));const A=cache.A;
       const rowsToDo=[f,RUN.rounds.A,RUN.rounds.C].filter((v,i,a)=>a.indexOf(v)===i);let ri=0;const revealed=new Set();let selected=null;
-      coach(`Before you look: for ${slotName(f)}, which earlier slot does the trained model lean on most? Tap a column in the lit row, then Confirm.`);
+      coach(`Before you look: for ${slotName(f)}, which slot — itself included — does the trained model lean on most? Tap a column in the lit row, then Confirm.`);
       const H=heatmap(A,{kind:"seq",rows:w.tokens.slice(0,T),cols:[...Array(T).keys()],colsPlain:true,cell:20,mask:(i,j)=>j>i,legendText:"darker = more weight · hatched = card",
         tip:(i,j,v)=>revealed.has(i)?(j>i?"0.000 (masked)":`A[${i}][${j}] = ${v.toFixed(3)}`):"hidden until you guess",
-        onCell:(i,j)=>{if(revealed.has(i)){setReadout(RC.a(cache,i,j));return;}if(j>i){toast("Under the card — zero, always.");return;}if(i!==rowsToDo[ri]){toast(`Row ${rowsToDo[ri]} is the one that's lit.`);return;}selected=j;H.highlight(i,j);}});
+        onCell:(i,j)=>{if(revealed.has(i)){setReadout(RC.a(cache,i,j));return;}if(j>i){toast("Under the card — zero, always.");return;}if(ri>=rowsToDo.length)return;if(i!==rowsToDo[ri]){toast(`Row ${rowsToDo[ri]} is the one that's lit.`);return;}selected=j;H.highlight(i,j);},
+        onCol:j=>{if(ri>=rowsToDo.length)return;const i=rowsToDo[ri];if(j>i){toast("Under the card — zero, always.");return;}selected=j;H.highlight(i,j);}});
       // hide un-revealed rows
       function paintHidden(){for(let i=0;i<T;i++)if(!revealed.has(i))H.cells[i].forEach((d,j)=>{if(j<=i){d.style.background="var(--panel-3)";d.style.color="";}});}
       paintHidden();H.rowHighlight(rowsToDo[0]);
@@ -3374,9 +3427,10 @@ const SCENES=[
       function describe(r,j){
         const row=A[r];const order=[...Array(r+1).keys()].sort((a,b)=>row[b]-row[a]);const j1=order[0],j2=order[1];
         const H2=rowEntropy(row),Hmax=Math.log(r+1);
-        let s=`It put <b>${row[j1].toFixed(2)}</b> on ${slotName(j1)}${j2!=null?`, ${row[j2].toFixed(2)} on ${slotName(j2)}`:""}, the rest scattered.`;
+        const rest=1-row[j1]-(j2!=null?row[j2]:0);
+        let s=`It put <b>${row[j1].toFixed(2)}</b> on ${slotName(j1)}${j2!=null?`, ${row[j2].toFixed(2)} on ${slotName(j2)}`:""}${r+1>2&&rest>0.005?`, the remaining ${rest.toFixed(2)} scattered.`:"."}`;
         if(r>0&&H2>0.9*Hmax)s=`It spread almost evenly across the ${r+1} visible slots (${row[j1].toFixed(2)} at most) — no strong preference here.`;
-        else if(j1===r-1)s+=" Mostly the slot right before it — a common habit of small models.";
+        else if(j1===r-1)s+=" Mostly the slot right before it.";
         else if(j1===r)s+=" Mostly itself.";
         if(r===f)s+=` Your hand row gave ${slotName(j1)} ${Math.round(hand[j1]*100)}%.`;
         s+=(j===j1)?" You called it.":` You tapped slot ${j}, which got ${row[j].toFixed(2)}.`;
@@ -3447,25 +3501,28 @@ const SCENES=[
         attnRow.append(el("p","helper",`it wrote ${q(RUN.vocab[st.chosen])} after “…${esc(labels.slice(-4).map(showTok).join(" "))}” at T = ${st.T}; the row above is how the last slot blended the context.`));}
       function check(){if(need.t1>=8&&need.t0>=4&&need.t2>=4&&need.tapped&&!doneFlags[current]){RUN.generated={prompt:tape.slice(0,promptLen),ids:tape.slice(),text:RUN.tok.decode(tape)};saveRun();
         coach(`It wrote: <i>${esc(RUN.tok.decode(tape).slice(0,140))}</i>… Every token was a full forward pass — a row you now know how to build.`,true);
-        callout(stage,"sampling · temperature · autoregressive",`<b>Sampling</b>: draw from the odds instead of always taking the top (T = 0 is greedy and loops). <b>Temperature</b> divides the logits before softmax: below 1 sharpens, above 1 flattens toward noise. <b>Autoregressive</b>: its own output becomes its next input, and only the last ${T} tokens are in view — the context window.`);markDone();}}
+        callout(stage,"sampling · temperature · autoregressive",`<b>Sampling</b>: draw from the odds instead of always taking the top (T = 0 is greedy: the same prompt always gives the same run, and long runs tend to fall into a cycle). <b>Temperature</b> divides the logits before softmax: below 1 sharpens, above 1 flattens toward noise. <b>Autoregressive</b>: its own output becomes its next input, and only the last ${T} tokens are in view — the context window.`);markDone();}}
       spin.addEventListener("click",async()=>{
-        if(spinning)return;spinning=true;spin.disabled=true;
-        const {probs,cache}=dist();const pick=sampleFrom(probs,temp,rng,0);
-        await wh.spinTo(pick.id,rng);
-        steps.push({contextIds:cache.ids.slice(),row:cache.A[cache.T-1].slice(),chosen:pick.id,T:temp});
+        if(spinning)return;spinning=true;spin.disabled=true;tSeg.enable(false);
+        const T0=temp;const {probs,cache}=dist();const pick=sampleFrom(probs,T0,rng,0);
+        const ctxIds=cache.ids.slice(),row=cache.A[cache.T-1].slice();
+        try{await wh.spinTo(pick.id,rng);}finally{tSeg.enable(true);}
+        if(token!==sceneToken)return;
+        steps.push({contextIds:ctxIds,row,chosen:pick.id,T:T0});
         tape.push(pick.id);
-        if(temp===1)need.t1++;else if(temp===0)need.t0++;else if(temp===2)need.t2++;
+        if(T0===1)need.t1++;else if(T0===0)need.t0++;else if(T0===2)need.t2++;
         if(temp===0){const key=tape.slice(promptLen).join(",");if(lastT0&&lastT0.startsWith(key.split(",").slice(0,4).join(","))&&tape.length-promptLen===4)toast("Identical to your last T = 0 run, as promised.","good");}
         refresh();showStep(steps.length-1);
         if(tape.length>T&&tape.length===T+1)toast(`Context is ${T}. The first token has fallen off the left edge — the model can no longer see it.`);
         coach(`It chose ${q(RUN.vocab[pick.id])} after “…${esc(cache.ids.slice(-3).map(id=>showTok(RUN.vocab[id])).join(" "))}”. Tap a token it wrote to see where its row looked, or spin again.`);
         spinning=false;spin.disabled=false;check();
       });
-      clear.addEventListener("click",()=>{if(temp===0&&tape.length-promptLen>=4)lastT0=tape.slice(promptLen).join(",");tape=tape.slice(0,promptLen);steps.length=0;attnRow.innerHTML="";refresh();});
-      add.addEventListener("click",()=>{const r=RUN.tok.encodeReport(input.value);if(r.unknown.length){toast(`${q(r.unknown[0])} has no row in E — the model literally has no way to think about it. Real models chop unknown words into pieces they know.`,"bad");return;}if(!r.ids.length)return;tape=tape.slice(0,promptLen).concat(r.ids);promptLen=tape.length;steps.length=0;input.value="";if(promptLen>T)toast(`Context is ${T}. The first ${promptLen-T} prompt tokens fall off the left edge.`);refresh();});
+      const busy=()=>{if(spinning){toast("Wait for the wheel to stop.");return true;}return false;};
+      clear.addEventListener("click",()=>{if(busy())return;if(temp===0&&tape.length-promptLen>=4)lastT0=tape.slice(promptLen).join(",");tape=tape.slice(0,promptLen);steps.length=0;attnRow.innerHTML="";refresh();});
+      add.addEventListener("click",()=>{if(busy())return;const r=RUN.tok.encodeReport(input.value);if(r.unknown.length){toast(`${q(r.unknown[0])} has no row in E — the model literally has no way to think about it. Real models chop unknown words into pieces they know.`,"bad");return;}if(!r.ids.length)return;tape=tape.slice(0,promptLen).concat(r.ids);promptLen=tape.length;steps.length=0;input.value="";if(promptLen>T)toast(`Context is ${T}. The first ${promptLen-T} prompt tokens fall off the left edge.`);refresh();});
       input.addEventListener("keydown",e=>{if(e.key==="Enter")add.click();});
       const shelf=vocabChips(stage,{label:"vocabulary — drag a token into the prompt"});
-      registerZone(tapeBox,p=>{if(!p.startsWith("tok:"))return false;tape=tape.slice(0,promptLen).concat([+p.slice(4)]);promptLen=tape.length;steps.length=0;refresh();return true;},4);
+      registerZone(tapeBox,p=>{if(!p.startsWith("tok:"))return false;if(spinning)return "Wait for the wheel to stop.";tape=tape.slice(0,promptLen).concat([+p.slice(4)]);promptLen=tape.length;steps.length=0;refresh();return true;},4);
       refresh();
     };
     whenTrained(stage,token,go2);
@@ -3508,16 +3565,16 @@ const SCENES=[
       stage.append(ex2);
       function cheatUI(){
         ex2.innerHTML="";ex2.append(el("h3","","2 · the twin that was allowed to peek"));
-        ex2.append(el("p","helper",`An identical model was trained on the same text, the same way, with one change: no card — every slot could look at every slot, including the one holding its own answer. Here are both attention maps on your 16 slots, unlabelled. Drag the <b>cheater</b> label onto the one that peeked.`));
+        ex2.append(el("p","helper",`An identical model was trained on the same text, the same way — same starting numbers, same batches, same ${CHEAT_CFG.steps.toLocaleString()} steps — with one change: no card. Every slot could look at every slot, including the one holding its own answer. Here are both attention maps on your 16 slots, unlabelled; the honest one keeps its card. Drag the <b>cheater</b> label onto the one that peeked.`));
         const honest=m.forward(w.ids.slice(0,T)).A;const cheatA=RUN.cheat.forward(w.ids.slice(0,T)).A;
         const order=(w.f%2===0)?[["honest",honest],["cheat",cheatA]]:[["cheat",cheatA],["honest",honest]];
         const grid=el("div","pairgrid");let solved=false;
         const labelChip=makeChip({label:"cheater",sub:"drop on a map",payload:"cheater",cls:"mono",ghostHtml:"<span class='tag o'>cheater</span>"});
         order.forEach(([kind,A])=>{
-          const box=el("div","mapbox");const h=heatmap(A,{kind:"seq",rows:w.tokens.slice(0,T),cols:[...Array(T).keys()],colsPlain:true,cell:14,legend:false});box.append(h.el);
+          const box=el("div","mapbox");const h=heatmap(A,{kind:"seq",rows:w.tokens.slice(0,T),cols:[...Array(T).keys()],colsPlain:true,cell:14,legend:false,mask:kind==="honest"?(i,j)=>j>i:null});box.append(h.el);
           const cap=el("div","helper","?");box.append(cap);grid.append(box);
           registerZone(box,p=>{if(p!=="cheater")return false;if(solved)return true;
-            if(kind!=="cheat"){return "That one still has a hatched future — it is the honest model. Look for a single bright stripe just above the diagonal.";}
+            if(kind!=="cheat"){return "That one's future is under the card — hatched, exactly zero. It is the honest model. Look for weight anywhere above the diagonal on the other map.";}
             solved=true;spend(labelChip);
             let stripe=0;for(let i=0;i<T-1;i++)stripe+=cheatA[i][i+1];stripe/=T-1;
             const hl=RUN.losses.length?RUN.losses.slice(-50).reduce((a,b)=>a+b,0)/Math.min(50,RUN.losses.length):NaN;
@@ -3525,7 +3582,11 @@ const SCENES=[
             const causal=causalCorpusLoss(RUN.cheat);
             const was=RUN.cheat.causal;RUN.cheat.causal=true;const gen=RUN.cheat.generate(w.ids.slice(0,3),14,{temperature:0}).ids;RUN.cheat.causal=was;
             grid.querySelectorAll(".helper").forEach((c,i)=>c.innerHTML=order[i][0]==="cheat"?"<b>the cheater</b>":"the honest model");
-            ex2.append(el("p","helper",`Caught. The cheater puts on average <b>${stripe.toFixed(2)}</b> of each row's weight on the very next slot — the answer. Its training loss looked wonderful (${isNaN(cl)?"–":cl.toFixed(2)} vs the honest model's ${isNaN(hl)?"–":hl.toFixed(2)}); but evaluated honestly — future hidden, as at generation time — it scores <b>${causal.toFixed(2)}</b>, ${causal>Math.log(RUN.V)?"worse than guessing uniformly (ln V = "+Math.log(RUN.V).toFixed(2)+")":"barely better than guessing"}. Asked to write, it produces: <i>${esc(RUN.tok.decode(gen).replace(/\n/g," ↵ "))}</i>. It learned to copy, not to predict — the card is what makes the game real.`));
+            let future=0;for(let i=0;i<T-1;i++)for(let j=i+1;j<T;j++)future+=cheatA[i][j];future/=T-1;
+            const lnV=Math.log(RUN.V),floor=RUN.floors.bigram,honestL=corpusLoss(RUN.model,RUN.ids);
+            const where=stripe>0.5?`most of each row's weight (<b>${stripe.toFixed(2)}</b> on average) on the very next slot — the answer`:`<b>${future.toFixed(2)}</b> of each row's weight, on average, on slots in its future (${stripe.toFixed(2)} of it on the very next slot — the answer)`;
+            const verdict=causal>lnV?`worse than guessing uniformly (ln V = ${lnV.toFixed(2)})`:causal>floor?`worse than a previous-word-only table (${floor.toFixed(2)}) and far behind the honest model (${honestL.toFixed(2)})`:`still behind the honest model (${honestL.toFixed(2)})`;
+            ex2.append(el("p","helper",`Caught. The cheater puts ${where}. Its training loss looked wonderful (${isNaN(cl)?"–":cl.toFixed(2)} vs the honest model's ${isNaN(hl)?"–":hl.toFixed(2)}); but evaluated honestly — future hidden, as at generation time — it scores <b>${causal.toFixed(2)}</b>, ${verdict}. Asked to write, it produces: <i>${esc(RUN.tok.decode(gen).replace(/\n/g," ↵ "))}</i>. It learned to ${stripe>0.5?"copy":"peek"}, not to predict — the card is what makes the game real.`));
             toast("Caught the cheater.","good");return true;},6);
         });
         ex2.append(grid);
@@ -3544,7 +3605,7 @@ const SCENES=[
         tbl.append(el("div","nt mono",esc(RUN.vocab[id])),el("div","nb",before),el("div","na",after));});
       ex3.append(tbl);
       const h0=meanAttnEntropy(fresh,w.ids.slice(0,T)),h1=meanAttnEntropy(m,w.ids.slice(0,T));
-      ex3.append(el("p","helper",`Nearest by cosine similarity of their strips in E. At birth the neighbours are arbitrary; after training, words that fill the same slots in this text tend to sit together — because E is used both to say “what follows me” and, through the keys and values, “what I offer later slots”. Also: the average spread of an attention row on your window fell from <b>${h0.toFixed(2)}</b> to <b>${h1.toFixed(2)}</b> nats (0 would be all weight on one slot).`));
+      ex3.append(el("p","helper",`Nearest by cosine similarity of their strips in E. At birth the neighbours are arbitrary — every strip is random. After training the lists changed; read them against the text and judge for yourself whether the neighbours play similar roles. Also: the average spread of an attention row on your window went from <b>${h0.toFixed(2)}</b> to <b>${h1.toFixed(2)}</b> nats (0 would be all weight on one slot).`));
       stage.append(ex3);
     });
   }
@@ -3560,11 +3621,11 @@ const SCENES=[
     coach("Read the five lines. Then take it apart again on another text, if you like.",true);
     const eq=el("div","equations");
     const lines=[
-      [2,`x₀ = E[ids] + P`,`the strips you looked up, plus the slot's address`],
-      [4,`A = softmax(mask(<span class="q">Q</span><span class="k">Kᵀ</span> / √d))`,`query meets key, the card, the share-out — your poured row is one row of A`],
-      [7,`x₁ = x₀ + (A·<span class="v">V</span>)Wo`,`the blend of values, added back`],
-      [8,`x₂ = x₁ + relu(x₁W1)W2`,`the polish`],
-      [8,`p = softmax(x₂Wout)`,`the bet — and its surprise is the loss you drove down`],
+      [3,`x₀ = E[ids] + P`,`the strips you looked up, plus the slot's address`],
+      [5,`A = softmax(mask(<span class="q">Q</span><span class="k">Kᵀ</span> / √d))`,`query meets key, the card, the share-out — your poured row is one row of A`],
+      [8,`x₁ = x₀ + (A·<span class="v">V</span>)Wo`,`the blend of values, added back`],
+      [9,`x₂ = x₁ + relu(x₁W1)W2`,`the polish`],
+      [9,`p = softmax(x₂Wout)`,`the bet — and its surprise is the loss you drove down`],
     ];
     lines.forEach(([scene,f,cap])=>{const r=el("button","eqline");r.type="button";r.innerHTML=`<span class="f">${f}</span><span class="c">${cap}</span>`;r.addEventListener("click",()=>go(scene));eq.append(r);});
     stage.append(eq);
@@ -3585,7 +3646,7 @@ const SCENES=[
     if(RUN.generated)a2.append(el("div","helper","what it wrote"),el("div","poem gen",esc(RUN.generated.text)));
     a2.append(el("div","helper",`vocabulary ${V} · tokens ${RUN.ids.length} · parameters ${N.toLocaleString()} · steps ${CFG.steps.toLocaleString()}`));
     art.append(a2);
-    stage.append(el("div","card honest",`<h3>an honest note</h3><p>It stored no text; it moved ${N.toLocaleString()} numbers until the arithmetic reproduced this text's patterns. On a text this small that is close to memorising it — which is why it can't say anything new, and why the loss curve flattens so fast.</p><p><b>What GPT adds:</b> many attention heads per layer (each with its own Wq, Wk, Wv, looking for different things at once), dozens of stacked blocks (so a slot can look at what other slots already blended), layer normalisation, sub-word tokens instead of whole words, a context of thousands of slots instead of ${T}, and around 10¹¹ numbers instead of ${N.toLocaleString()} — trained on a good part of the written internet. None of the five lines changes.</p>`));
+    stage.append(el("div","card honest",`<h3>an honest note</h3><p>It stored no text; it moved ${N.toLocaleString()} numbers until the arithmetic reproduced this text's patterns. On a text this small that is close to memorising it — which is why it can't say anything new.</p><p><b>What GPT adds:</b> many attention heads per layer (each with its own Wq, Wk, Wv, looking for different things at once), dozens of stacked blocks (so a slot can look at what other slots already blended), layer normalisation, sub-word tokens instead of whole words, a context of thousands of slots instead of ${T}, and around 10¹¹ numbers instead of ${N.toLocaleString()} — trained on a good part of the written internet. None of the five lines changes.</p>`));
     const btns=el("div","btnrow");const again=el("button","btn","Play again on another text");again.type="button";again.addEventListener("click",()=>go(0));
     const wipe=el("button","btn quiet small","Reset everything");wipe.type="button";wipe.addEventListener("click",()=>{try{Object.keys(localStorage).filter(k=>k.startsWith("lookback-")).forEach(k=>localStorage.removeItem(k));}catch(e){}location.reload();});
     btns.append(again,wipe);stage.append(btns);
