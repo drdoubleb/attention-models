@@ -4,14 +4,16 @@ Two ways into the same tiny attention-based language model, both built
 **completely from scratch** — tokenizer, forward pass, backpropagation,
 optimizer — with no ML frameworks:
 
-* **`index.html` — "Look Back", an interactive tutorial.** One
-  self-contained web page that trains a real transformer in your browser
-  on a poem you pick, then has you take it apart piece by piece — by hand.
+* **`index.html` — "Look Back", an interactive tutorial.** Start with
+  14 guided lessons explaining attention and LLMs from first principles.
+  Open the optional model lab to train a real transformer in your browser
+  and take it apart piece by piece.
 * **The Python pipeline** — the same model in plain NumPy, rendering a
   series of MP4 videos of its internals.
 
-Every number shown in either is computed by code you can read in an
-afternoon.
+The model and its arithmetic are implemented in readable JavaScript and
+NumPy. Guided examples explicitly label hand-chosen values and scripted
+scenarios; these must not be mistaken for measurements of the trained model.
 
 ## The interactive tutorial (`index.html`)
 
@@ -21,40 +23,76 @@ offline). To publish it the way the NGS tutorial is published, enable
 GitHub Pages for this repository (branch `main`, folder `/`); the page will
 then be served at `drdoubleb.com/attention-models`.
 
-You pick the training text first — the cat-and-dog story from the videos,
+### Start with the guided lessons
+
+The default page explains each concept before its activity. No coding or
+calculus is required. Every lesson includes an experiment, a takeaway,
+a checkpoint with feedback for every answer, optional deeper math, and
+links to primary sources. Lessons and checkpoints never lock navigation.
+
+| Part | Lessons |
+|------|---------|
+| Get your bearings | Next-token prediction; tokenization and subwords; embeddings and position |
+| Understand attention | Queries/keys/values; scores, causal masking, softmax and weighted values; multi-head attention, residuals, MLPs and normalization; encoder, decoder and cross-attention architectures |
+| Learn and generate | Targets, cross-entropy, backpropagation and optimization; held-out evaluation and overfitting; temperature, top-k/top-p, context windows and KV caches |
+| From a model to an assistant | Scaling, RoPE, FlashAttention, GQA, MoE and quantization; pretraining, SFT, RLHF, DPO and LoRA; prompts, RAG and tools; hallucinations, interpretability, multimodality and evaluation |
+
+The guide uses a short cat sentence as a recurring example, plus two optional
+connections to the NGS tutorial that explain where the analogy stops.
+Reading location and successful checkpoints are saved locally, and the guide
+still works when browser storage is unavailable. Link directly to a lesson
+with a hash such as `index.html#learn/attention` or `index.html#learn/assistant`.
+The model does not begin training until a lab is opened.
+
+### Explore the original model lab
+
+Choose a training text — the cat-and-dog story from the videos,
 Christina Rossetti's *Who Has Seen the Wind?*, the opening of *A Tale of Two
 Cities*, *The House That Jack Built*, Blake's *The Tyger*, or anything you
-paste — and every number on every later step comes from that text. A
+paste — and inspect computations from that text. A
 word-level transformer (d = 16, one block, one head, ~3–5k parameters)
-trains in the background in about ten seconds; the story is one continuous
+trains in the background (speed depends on the device); the story is one continuous
 game played on one 16-token window of your text:
 
 | # | Step | What you do |
 |---|------|-------------|
 | 1 | Cover & guess | Play next-token prediction yourself; lose at the slot where only *looking back* could have told you the answer |
-| 2 | Chop | Cut punctuation off word tiles with the scissors; bet which token gets id 0; count the vocabulary |
-| 3 | Look up | Fetch each slot's 16-number strip from the table E; notice two identical rows; drag position strips P onto them |
-| 4 | Pour | Pour 100 % of "your" attention over the earlier slots — your row becomes a sealed bet |
-| 5 | Ask & offer | Drag the query onto keys; watch the 16 products sum to a score; wrong targets (Q on Q, Q on V, the raw strip) explain themselves; then find the top key on the trained model |
-| 6 | The card | On the full 16×16 score matrix, confirm where each row's future begins — the causal mask, and why it exists |
-| 7 | Share out | Softmax as a fixed budget: push one slot above 0.5, raise another *without touching its slider*, guess the trained top share, snap back |
-| 8 | Blend | Pour values into the bowl in the amounts the weights allow, ·Wo, add back to the slot (the residual) |
-| 9 | Bet | Two taps of feed-forward polish, then bet on the trained model's top pick; see the newborn's flat odds and the loss |
-| 10 | Train | Move three of the model's numbers by hand (with the real gradient printed), then hold to train — live loss curve, live attention map, your bets judged |
-| 11 | Read its mind | Predict-then-reveal rows of the learned attention map, your poured row beside the machine's |
-| 12 | Let it play | A proportional wheel spins on the model's odds; temperature 0 / 0.5 / 1 / 2; tap any generated token to see where it looked |
+| 2 | Tokenize | Cut punctuation off word tiles with the scissors; bet which token gets id 0; count the vocabulary |
+| 3 | Embeddings | Fetch each slot's 16-number strip from the table E; notice two identical rows; drag position strips P onto them |
+| 4 | Choose context | Pour 100 % of "your" attention over the available slots — your row becomes a sealed bet |
+| 5 | Queries & keys | Drag the query onto keys; watch the 16 products sum to a score; then find the top key on the trained model |
+| 6 | Causal mask | On the full 16×16 score matrix, confirm where each row's future begins |
+| 7 | Softmax weights | Explore how changing one score changes the whole weight distribution |
+| 8 | Value mixture | Mix values in the amounts the weights allow, project with Wo, then add the residual |
+| 9 | Next-token scores | Apply the feed-forward network and output projection; inspect output probabilities and loss |
+| 10 | Train parameters | Move parameters with real gradients; train and inspect the training-corpus loss |
+| 11 | Inspect attention | Reveal input-dependent mixing weights without treating them as a complete explanation |
+| 12 | Generate tokens | Sample on the model's probabilities at different temperatures |
 | ★ | Experiments | Two contexts with the same last words and different answers; the unmasked "cheater" twin caught by its attention stripe; which words drifted together |
 
-Every drawn number can be tapped for its receipt (the formula with the real
-values that produced it); every sentence about the trained model is
-generated from the live numbers, never written in advance. Progress and
-the trained weights are kept in `localStorage`. Works with mouse, touch or
+The original numerical receipts and live computations remain available.
+Each lab step now identifies its purpose and links back to a relevant
+guided lesson. All experiments are accessible after selecting text; use
+“Continue without finishing” to move past a puzzle without marking it complete.
+Guided links use the cat story by default if no text has been selected.
+Lab deep links use a hash such as `index.html#lab/5`.
+
+The trained weights are kept in `localStorage`. Works with mouse, touch or
 keyboard (click a chip, then click its destination), respects
 `prefers-reduced-motion`, and follows the light/dark theme.
 
 `node tests/test_web_model.js` extracts the model script from `index.html`
 and checks it the way `tests/test_gradients.py` checks the NumPy model:
 finite-difference gradients, tokenizer round trip, deterministic training.
+
+`node tests/test_guide.js` checks all inline scripts, curriculum completeness,
+lab mappings, masked weighted mixtures, softmax stability, temperature,
+top-p filtering, context truncation, loss, and recovery from unavailable storage.
+Both JavaScript test commands require only Node.js.
+
+See [the review and coverage notes](docs/tutorial-review.md) for the teaching
+problems addressed, scope, and validation limits. The NumPy model and video
+pipeline are unchanged. The page remains one file with no build step.
 
 ## The video series
 
