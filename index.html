@@ -672,7 +672,86 @@ input[type=range]{accent-color:var(--accent);width:100%}
 .pulse{animation:pulse 1.2s ease-in-out infinite}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 var(--accent-ring)}50%{box-shadow:0 0 0 6px transparent}}
 
+/* ---------- primer: the "read first" lesson above every step ---------- */
+#primer{margin:0 0 18px}
+.primer{border:1px solid var(--line-soft);border-radius:14px;background:var(--panel-2);overflow:hidden}
+.primer summary{cursor:pointer;padding:12px 16px;font-weight:600;font-size:14px;list-style:none;display:flex;align-items:center;gap:10px;color:var(--text);user-select:none}
+.primer summary::-webkit-details-marker{display:none}
+.primer summary .chev{width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--muted);transition:transform .2s;flex:0 0 auto}
+.primer:not([open]) summary .chev{transform:rotate(-90deg)}
+.primer summary .hint{margin-left:auto;font-weight:400;font-size:12px;color:var(--faint)}
+.primer summary:hover{background:var(--accent-soft)}
+.primer .body{padding:2px 18px 18px;font-size:14.5px;line-height:1.62;color:var(--text)}
+.primer .body>p:first-child{margin-top:6px}
+.primer h4,.lesson h4{margin:18px 0 6px;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.primer p,.lesson p{margin:6px 0;max-width:80ch}
+.primer ul,.primer ol,.lesson ul,.lesson ol{margin:6px 0 8px 22px;padding:0;max-width:80ch}
+.primer li,.lesson li{margin:5px 0}
+.primer .ex,.lesson .ex{border-left:3px solid var(--q);background:var(--panel);border-radius:0 10px 10px 0;padding:10px 14px;margin:10px 0;max-width:80ch}
+.primer .ex.k,.lesson .ex.k{border-left-color:var(--k)} .primer .ex.v,.lesson .ex.v{border-left-color:var(--v)} .primer .ex.g,.lesson .ex.g{border-left-color:var(--good)}
+.primer .ex .exl,.lesson .ex .exl{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--q-ink);font-weight:600;margin-bottom:4px}
+.primer .ex.k .exl{color:var(--k-ink)} .primer .ex.v .exl{color:var(--v-ink)} .primer .ex.g .exl,.lesson .ex.g .exl{color:var(--good-ink)}
+.primer .ex p,.lesson .ex p{margin:4px 0}
+.primer .formula,.lesson .formula{margin:8px 0;white-space:normal;line-height:1.7}
+.primer .todo,.lesson .todo{border:1.5px dashed var(--accent-ring);border-radius:12px;padding:10px 14px;margin:14px 0 4px;background:var(--accent-soft);max-width:80ch}
+.primer .todo .exl{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:4px}
+.primer .todo ol{margin-bottom:0}
+table.tbl{border-collapse:collapse;font-size:13.5px;margin:8px 0;max-width:100%}
+table.tbl th,table.tbl td{border-bottom:1px solid var(--line-soft);padding:6px 12px 6px 0;text-align:left;vertical-align:top}
+table.tbl th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+table.tbl td.mono,table.tbl th.mono{font-family:var(--mono);font-size:12.5px;white-space:nowrap}
+table.tbl td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right}
+table.tbl tr.hl td{background:var(--accent-soft)}
+.tblwrap{overflow-x:auto;max-width:100%}
+.term{font-family:var(--serif);font-style:italic}
+.pill.step{font-family:var(--mono);font-size:11px;padding:1px 8px;cursor:pointer}
+.pill.step:hover{border-color:var(--accent)}
+/* small numeric matrices for the worked examples */
+.tiny{display:inline-grid;gap:2px;font-family:var(--mono);font-size:12px;vertical-align:middle;margin:6px 14px 6px 0;align-items:center}
+.tiny .tc{min-width:46px;padding:3px 7px;text-align:right;background:var(--panel);border:1px solid var(--line-soft);border-radius:4px;color:var(--text);font-variant-numeric:tabular-nums}
+.tiny .tc.lab{background:none;border-color:transparent;color:var(--faint);font-size:10.5px;text-align:center}
+.tiny .tc.lab.r{text-align:right;padding-right:8px}
+.tiny .tc.m{background:repeating-linear-gradient(135deg,var(--panel-3) 0 3px,var(--panel-2) 3px 6px);color:var(--faint)}
+.tiny .tc.hl{border-color:var(--q);background:var(--q-soft);font-weight:700}
+.tiny .tn{grid-column:1/-1;font-size:11px;color:var(--muted);letter-spacing:.06em;padding:0 0 2px 2px}
+.tinyrow{display:flex;flex-wrap:wrap;align-items:flex-start;gap:0 6px}
+.tinyrow .op{align-self:center;font-family:var(--mono);color:var(--muted);padding:0 4px 8px}
+/* pipeline diagram */
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:6px;margin:10px 0}
+.flow .fbox{border:1.5px solid var(--line);border-radius:10px;background:var(--panel);padding:8px 10px;min-width:96px;max-width:170px;display:flex;flex-direction:column;gap:3px;font-size:12.5px;line-height:1.35}
+.flow .fbox b{font-family:var(--mono);font-weight:600;font-size:12.5px}
+.flow .fbox small{color:var(--muted);font-size:11.5px}
+.flow .fbox .fs{margin-top:auto;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding-top:3px}
+.flow .fbox.attn{border-color:var(--q)} .flow .fbox.ffn{border-color:var(--v)} .flow .fbox.out{border-color:var(--k)} .flow .fbox.emb{border-color:var(--pos)}
+.flow .farrow{align-self:center;color:var(--faint);font-size:16px;padding:0 1px}
+/* glossary & cheat sheet */
+.gloss{display:grid;grid-template-columns:max-content 1fr;gap:8px 18px;font-size:14px;align-items:baseline}
+.gloss dt{font-weight:600;font-family:var(--mono);font-size:13px;white-space:nowrap}
+.gloss dd{margin:0;color:var(--text)}
+.gloss dd .where{font-size:11px;color:var(--faint);margin-left:6px;white-space:nowrap}
+.lesson{font-size:14.5px;line-height:1.62}
+.lesson .card{margin-bottom:14px}
+.lesson h3.big{font-family:var(--serif);font-weight:500;font-size:22px;margin:22px 0 6px;letter-spacing:-.01em;font-variation-settings:"opsz" 32}
+.lesson h3.big:first-child{margin-top:0}
+.lesson .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.lesson .two{columns:2;column-gap:28px}
+.lesson .two p{break-inside:avoid}
+.heads{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.heads .hd{border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--panel);font-size:12.5px;min-width:120px}
+.heads .hd b{display:block;font-family:var(--mono);font-size:12px;margin-bottom:2px}
+.heads .hd.h0{border-color:var(--q)} .heads .hd.h1{border-color:var(--k)} .heads .hd.h2{border-color:var(--v)} .heads .hd.h3{border-color:var(--pos)}
+.stack{display:flex;flex-direction:column;gap:4px;margin:8px 0;max-width:360px}
+.stack .blk{border:1.5px solid var(--line);border-radius:8px;padding:6px 10px;background:var(--panel);font-family:var(--mono);font-size:12px;display:flex;justify-content:space-between}
+.stack .blk small{color:var(--faint);font-family:var(--sans)}
+.mistake{border-left:3px solid var(--bad);background:var(--bad-soft);border-radius:0 10px 10px 0;padding:8px 14px;margin:8px 0;max-width:80ch}
+.mistake b{color:var(--bad-ink)}
+
 @media (max-width:860px){
+  .lesson .grid2{grid-template-columns:1fr}
+  .lesson .two{columns:1}
+  .gloss{grid-template-columns:1fr}
+  .gloss dd{margin-bottom:6px}
+  .primer .body{padding:2px 14px 14px}
   #app{flex-direction:column}
   #rail{width:auto;flex:none;height:auto;position:static;flex-direction:row;align-items:center;overflow-x:auto;padding:12px 14px;gap:14px;border-right:none;border-bottom:1px solid var(--line-soft)}
   #brand .sub,#brand .home{display:none}
@@ -712,6 +791,7 @@ input[type=range]{accent-color:var(--accent);width:100%}
         <h1></h1>
         <p class="lede"></p>
       </header>
+      <div id="primer" hidden></div>
       <div id="coach" aria-live="polite" aria-atomic="true"><span class="pin"></span><span id="coachtext"></span></div>
       <section id="stage"></section>
       <div id="readout" class="mono" hidden></div>
@@ -1678,8 +1758,9 @@ function makeDragSource(elm,payload,ghostHtml){
 
 /* ============================ scene plumbing ============================ */
 let current=0,unlocked=0,doneFlags=[];
-function saveProg(){try{localStorage.setItem("lookback-unlocked",String(unlocked));}catch(e){}}
-function loadProg(){try{const v=parseInt(localStorage.getItem("lookback-unlocked"));if(!isNaN(v))unlocked=Math.min(v,SCENES.length-1);}catch(e){}}
+/* progress is stored by scene id, so that inserting or reordering scenes never unlocks the wrong one */
+function saveProg(){try{localStorage.setItem("lookback-unlocked-id",SCENES[unlocked].id);}catch(e){}}
+function loadProg(){try{const id=localStorage.getItem("lookback-unlocked-id");const i=SCENES.findIndex(s=>s.id===id);if(i>=0)unlocked=i;}catch(e){}}
 function markDone(){
   if(doneFlags[current])return;
   doneFlags[current]=true;
@@ -1709,10 +1790,11 @@ let sceneToken=0;   // bumps on every go(); async scene code checks it before to
 function go(i){
   current=i;clearScene();sceneToken++;setReadout(null);if(typeof tipEl!=="undefined")tipEl.style.opacity=0;
   const s=SCENES[i];
-  if(s.needsText&&!RUN.text){toast("Pick a training text first.","bad");return go(0);}
+  if(s.needsText&&!RUN.text){toast("Pick a training text first.","bad");return go(PICK);}
   $("#scenehead .eyebrow").textContent=s.eyebrow;
-  $("#scenehead h1").textContent=s.title;
-  $("#scenehead .lede").innerHTML=s.lede;
+  $("#scenehead h1").textContent=typeof s.title==="function"?s.title():s.title;
+  $("#scenehead .lede").innerHTML=typeof s.lede==="function"?s.lede():s.lede;
+  renderPrimer(s);
   const stage=$("#stage");stage.innerHTML="";
   $("#backBtn").disabled=i===0;
   $("#nextBtn").disabled=true;
@@ -2555,16 +2637,241 @@ function vocabChips(host,opts={}){                        // a shelf of vocabula
 }
 function callout(host,term,body,cls){const c=el("div","callout"+(cls?" "+cls:""));c.innerHTML=`<span class="term">${term}</span><p>${body}</p>`;host.append(c);return c;}
 function relockAfterTextChange(){
-  if(unlocked>1){toast("New text — the later steps re-lock, because every number on them changes.");unlocked=1;doneFlags=[];saveProg();}
+  if(unlocked>PICK+1){toast("New text — the later steps re-lock, because every number on them changes.");unlocked=PICK+1;doneFlags=[];saveProg();}
+}
+
+/* ============================ primers: the "read first" lesson on every step ============================
+   Every step opens with a short lesson above the coach line: the idea in plain words, why the model
+   needs it, the math with its shapes, a worked example small enough to check on paper, and what to do.
+   The worked examples are computed live from the three-token toy model below — never typed in. */
+const H4=t=>`<h4>${t}</h4>`;
+const EX=(label,body,cls)=>`<div class="ex${cls?" "+cls:""}"><div class="exl">${label}</div>${body}</div>`;
+const TODO=body=>`<div class="todo"><div class="exl">Your turn</div>${body}</div>`;
+const FORM=html=>`<div class="formula">${html}</div>`;
+/* a number for prose: fixed digits, trailing zeros dropped, typographic minus (0.5, 1, −0.71) */
+const num=(v,dg=2)=>{const a=+Math.abs(v).toFixed(dg);return (v<0&&a!==0?"−":"")+String(a);};
+/* a small numeric matrix for the worked examples. opts: {name, rows, cols, digits, hl:[[i,j|null]], mask(i,j)} */
+function tinyMat(M,opts={}){
+  const R=M.length,C=M[0].length,dg=opts.digits==null?2:opts.digits;
+  const cols=(opts.rows?"max-content ":"")+`repeat(${C},max-content)`;
+  let h=`<span class="tiny" style="grid-template-columns:${cols}" role="img" aria-label="${esc(opts.name||"matrix")}">`;
+  if(opts.name)h+=`<span class="tn">${opts.name}</span>`;
+  if(opts.cols){if(opts.rows)h+=`<span class="tc lab"></span>`;for(let j=0;j<C;j++)h+=`<span class="tc lab">${esc(showTok(String(opts.cols[j])))}</span>`;}
+  for(let i=0;i<R;i++){
+    if(opts.rows)h+=`<span class="tc lab r">${esc(showTok(String(opts.rows[i])))}</span>`;
+    for(let j=0;j<C;j++){
+      const masked=opts.mask&&opts.mask(i,j);
+      const hl=opts.hl&&opts.hl.some(([a,b])=>a===i&&(b==null||b===j));
+      h+=`<span class="tc${masked?" m":""}${hl?" hl":""}">${masked?"−∞":num(M[i][j],dg)}</span>`;
+    }
+  }
+  return h+`</span>`;
+}
+const tinyVec=(v,opts={})=>tinyMat([v],opts);
+const dotStr=(a,b,dg=2)=>a.map((x,i)=>`${num(x,dg)}×${num(b[i],dg)}`).join(" + ")+" = "+num(dot(a,b),dg);
+/* softmax of one row, shown as a table: score → e^score → ÷ Σ */
+function softmaxRowHtml(scores,labels){
+  const e=scores.map(s=>Math.exp(s));const sum=e.reduce((a,b)=>a+b,0);
+  return `<div class="tblwrap"><table class="tbl"><tr><th></th>${labels.map(l=>`<th class="mono">${esc(showTok(l))}</th>`).join("")}<th></th></tr>
+  <tr><td>score</td>${scores.map(s=>`<td class="num">${num(s,3)}</td>`).join("")}<td></td></tr>
+  <tr><td>e<sup>score</sup></td>${e.map(x=>`<td class="num">${num(x,3)}</td>`).join("")}<td class="num">Σ = ${num(sum,3)}</td></tr>
+  <tr><td>÷ Σ → weight</td>${e.map(x=>`<td class="num"><b>${num(x/sum,3)}</b></td>`).join("")}<td class="num">Σ = 1</td></tr></table></div>`;
+}
+/* gradient descent on loss(w) = (w − 3)² from w = 0: the one-number picture of training */
+function descentTable(lr,steps=6){let w=0;const rows=[];for(let s=0;s<=steps;s++){const L=(w-3)*(w-3),g=2*(w-3);rows.push({s,w,L,g});w=w-lr*g;}return rows;}
+
+/* the toy model: three tokens "the cat sat", strips of two numbers, every matrix chosen so the sums are
+   short enough to check on paper.  Computed with the same functions as the real model. */
+const TOY=(()=>{
+  const words=["the","cat","sat"],vocab=["the","cat","sat"],ids=[0,1,2];
+  const E=[[1,0],[-0.5,1],[1,0.5]],P=[[0,0],[0.5,0],[0,0.5]];
+  const x0=ids.map((id,t)=>E[id].map((e,j)=>e+P[t][j]));
+  const Wq=[[1,0],[1,1]],Wk=[[0,1],[1,0]],Wv=[[1,0],[0,2]],Wo=[[0.5,0],[0,0.5]];
+  const W1=[[1,-1],[-1,1]],W2=[[1,0],[0,1]],Wout=[[1,0,-1],[0,1,0]];
+  const Q=matmul(x0,Wq),K=matmul(x0,Wk),V=matmul(x0,Wv);
+  const raw=matmulBT(Q,K),S=scaleMat(raw,1/Math.SQRT2);
+  const Sm=copyMat(S);for(let i=0;i<3;i++)for(let j=i+1;j<3;j++)Sm[i][j]=-1e9;
+  const A=softmaxRows(Sm),C=matmul(A,V),attnOut=matmul(C,Wo),x1=addMat(x0,attnOut);
+  const pre=matmul(x1,W1),h=pre.map(r=>r.map(v=>Math.max(0,v))),mlpOut=matmul(h,W2),x2=addMat(x1,mlpOut);
+  const logits=matmul(x2,Wout),probs=softmaxRows(logits);
+  const truth=0;   // the toy text loops — "the cat sat the cat sat…" — so after "sat" comes "the"
+  return {words,vocab,ids,E,P,x0,Wq,Wk,Wv,Wo,W1,W2,Wout,Q,K,V,raw,S,Sm,A,C,attnOut,x1,pre,h,mlpOut,x2,logits,probs,truth};
+})();
+
+/* the pipeline, as boxes: what goes in, what comes out, which step builds it */
+function flowDiagram(){
+  const box=(cls,b,small,step)=>`<div class="fbox ${cls}"><b>${b}</b><small>${small}</small><span class="fs">${step}</span></div>`;
+  const ar=`<span class="farrow" aria-hidden="true">→</span>`;
+  return `<div class="flow">`+[
+    box("","text","the words on the page","step 1"),
+    box("","tokens → ids","chop, then number","step 2"),
+    box("emb","x₀ = E[id] + P[slot]","one strip per slot","step 3"),
+    box("attn","Q, K, V = x₀·Wq, x₀·Wk, x₀·Wv","three summaries of every strip","steps 5, 8"),
+    box("attn","S = Q·Kᵀ ÷ √d","every slot scores every slot","step 5"),
+    box("attn","mask, softmax → A","hide the future, share out to 1","steps 6, 7"),
+    box("attn","x₁ = x₀ + (A·V)·Wo","blend the values, add back","step 8"),
+    box("ffn","x₂ = x₁ + relu(x₁W1)W2","feed-forward polish, per slot","step 9"),
+    box("out","p = softmax(x₂·Wout)","one score per token → odds","step 9"),
+    box("","loss = −ln p(truth)","train on it (10) · sample from it (12)","steps 10, 12"),
+  ].join(ar)+`</div>`;
+}
+
+/* glossary: [term, definition, scene id, step label] — rendered on the cheat sheet */
+const GLOSSARY=[
+  ["token","One unit of text the model reads. Here a word, a punctuation mark or a line break (↵); real models use sub-word pieces.","chop","step 2"],
+  ["token id","A token's place in the vocabulary list. A drawer number: it carries no meaning.","chop","step 2"],
+  ["vocabulary, V","The list of all distinct tokens; V is its size. The model outputs V scores at every slot.","chop","step 2"],
+  ["context window, T","How many tokens the model sees at once — 16 here. Anything further back is invisible to it.","cover","step 1"],
+  ["slot, position","One of the T places in the window, numbered 0 to T−1. Each holds one token.","lookup","step 3"],
+  ["strip, vector","A row of d numbers (d = 16). Everything the model knows about a slot at a given stage.","lookup","step 3"],
+  ["embedding, E","A learned table, V × d: one strip per token. Fetching row id is the first thing the model does.","lookup","step 3"],
+  ["positional embedding, P","A learned table, T × d: one strip per slot, added to the token's strip so the model knows where the token is.","lookup","step 3"],
+  ["x₀","The block's input, T × d: x₀[i] = E[id of slot i] + P[i].","lookup","step 3"],
+  ["parameters","All the learned numbers: E, P, Wq, Wk, Wv, Wo, W1, W2, Wout. Random at birth, moved by training.","train","step 10"],
+  ["attention","The one stage where slots exchange information: each slot takes a blend of the visible slots' values, in proportions it computes from its query and their keys.","pour","step 4"],
+  ["attention weights, A","One row per slot, non-negative, summing to 1: the mixing proportions of the blend. T × T.","pour","step 4"],
+  ["query, Q","q = x₀·Wq — what a slot is looking for. Compared against keys.","ask","step 5"],
+  ["key, K","k = x₀·Wk — how a slot advertises itself to the queries of other slots.","ask","step 5"],
+  ["value, V","v = x₀·Wv — what a slot hands over when it is attended to.","blend","step 8"],
+  ["dot product","Multiply two strips cell by cell and add the products. Large and positive when they point the same way.","ask","step 5"],
+  ["score, S","S[i][j] = qᵢ·kⱼ ÷ √d — how much slot i wants to look at slot j. Any sign, any size; not yet a weight.","ask","step 5"],
+  ["√d scaling","Dividing scores by √d keeps a newborn model's scores near zero so its share-outs start soft.","ask","step 5"],
+  ["causal mask (the card)","Before softmax, every score in a slot's future is set to −∞, so those slots get exactly 0.","card","step 6"],
+  ["softmax (share-out)","Turns any row of scores into positive weights that sum to 1: e raised to each score, divided by the row's total.","share","step 7"],
+  ["blend, C = A·V","The weighted average of the visible values, in the proportions A allows. Never a copy of one slot unless its share is 1.","blend","step 8"],
+  ["output projection, Wo","One more learned d × d matrix applied to the blend before it is added back; in multi-head models, where the heads are joined.","blend","step 8"],
+  ["residual connection","x₁ = x₀ + attention output: new information is added to the slot's strip, never swapped in.","blend","step 8"],
+  ["feed-forward layer (polish)","x₂ = x₁ + relu(x₁·W1)·W2, applied to each slot on its own. Attention gathers; this stage processes.","bet","step 9"],
+  ["ReLU","max(0, x): keeps positive numbers, clips negative ones to zero. The model's only non-linearity besides the softmaxes.","bet","step 9"],
+  ["logits","x₂·Wout: one raw, unbounded score per vocabulary token.","bet","step 9"],
+  ["probabilities, p","softmax(logits): the model's odds on the next token — V numbers summing to 1.","bet","step 9"],
+  ["surprise, cross-entropy","−ln p(truth): 0 when the model was certain and right, ln V for a blind guess over V tokens.","cover","step 1"],
+  ["loss","The average surprise over all slots (of a window, or of the whole text). The number training pushes down.","bet","step 9"],
+  ["gradient","For every parameter, how much the loss would change if that parameter moved a little. Together: the downhill direction.","train","step 10"],
+  ["backpropagation","The chain rule applied backwards through the forward pass; produces every gradient in one sweep.","train","step 10"],
+  ["learning rate","How far to move along the gradient each step. Too small crawls; too large diverges.","train","step 10"],
+  ["Adam","The optimizer used here: gradient descent with momentum and a per-parameter step size.","train","step 10"],
+  ["batch, training step","8 random 16-token windows, gradients averaged, one Adam update. 3,000 steps here.","train","step 10"],
+  ["bigram floor","The best loss any predictor that sees only the previous token can reach on this text. Beating it proves the model looks further back.","train","step 10"],
+  ["attention map","The matrix A drawn as a heatmap: rows ask, columns answer, darker = more weight.","mind","step 11"],
+  ["induction head","An attention pattern that, at a repeated word, looks at the slot after its first appearance and copies what came next. Your round-2 game.","mind","step 11"],
+  ["autoregressive generation","Predict, append, predict again: the model's own output becomes its next input.","play","step 12"],
+  ["sampling, temperature","Drawing the next token from the odds. Temperature divides the logits first: below 1 sharpens, above 1 flattens, 0 always takes the top pick.","play","step 12"],
+  ["greedy decoding","Temperature 0: always the most likely token. Deterministic, and prone to loops.","play","step 12"],
+  ["KV cache","At generation time, the keys and values of earlier tokens are computed once and kept; only the new token's are computed.","play","step 12"],
+  ["attention head","One set of Wq, Wk, Wv (and a share of Wo) computing one attention map. This model has one; real layers have many.","beyond","beyond"],
+  ["multi-head attention","Several heads per layer, each on a slice of the strip, blends concatenated and passed through Wo.","beyond","beyond"],
+  ["layer, block","One attention stage plus one feed-forward stage, with their residuals. Real models stack dozens; this page has one.","beyond","beyond"],
+  ["layer normalization","Rescaling each slot's strip to mean 0 and fixed spread before attention and before the feed-forward stage. Omitted here.","beyond","beyond"],
+  ["encoder, decoder","A block without the causal mask (sees the whole input) versus one with it (reads left to right, can generate). GPT is decoder-only.","beyond","beyond"],
+  ["cross-attention","Attention whose queries come from one sequence and whose keys and values come from another — the decoder reading the encoder in a translation model.","beyond","beyond"],
+  ["byte-pair encoding (BPE)","How real tokenizers learn sub-word pieces: start from characters, repeatedly merge the most frequent adjacent pair.","beyond","beyond"],
+];
+
+/* scenes are addressed by id wherever prose links to them, so the list can be reordered freely */
+function sceneIdx(id){return SCENES.findIndex(s=>s.id===id);}
+function goTo(id){const i=sceneIdx(id);if(i<0)return;if(i>unlocked){toast("That step unlocks when you reach it.");return;}go(i);}
+document.addEventListener("click",e=>{const p=e.target.closest("[data-goto]");if(p)goTo(p.dataset.goto);});
+function renderPrimer(s){
+  const host=$("#primer");host.innerHTML="";
+  if(!s.primer){host.hidden=true;return;}
+  let html;try{html=s.primer();}catch(e){console.error("primer failed",e);host.hidden=true;return;}
+  host.hidden=false;
+  const d=el("details","primer");d.open=lsGet("lookback-primer")!=="closed";
+  const hint=()=>d.open?"click to collapse":"click to expand";
+  d.innerHTML=`<summary><span class="chev" aria-hidden="true"></span><span>Read first · ${s.primerTitle||"the idea behind this step"}</span><span class="hint">${hint()}</span></summary><div class="body">${html}</div>`;
+  /* the preference is saved synchronously on the click (the element's own toggle happens as the click's default
+     action, so `open` still holds the old state here) and confirmed by the asynchronous toggle event */
+  d.querySelector("summary").addEventListener("click",()=>lsSet("lookback-primer",d.open?"closed":"open"));
+  d.addEventListener("toggle",()=>{lsSet("lookback-primer",d.open?"open":"closed");d.querySelector(".hint").textContent=hint();});
+  host.append(d);
 }
 
 const SCENES=[
 
-/* ---------------- 0 · Pick your page ---------------- */
+/* ---------------- the big picture: read before anything ---------------- */
 {
-  label:"Pick a text",grp:"Start",eyebrow:"Start · your text",
+  id:"intro",label:"The big picture",grp:"Start",dot:"·",eyebrow:"Start · read first",autoDone:true,
+  title:"What you are about to build",
+  lede:"A language model is a machine that guesses the next word. Attention is the part that lets each word look back at the right earlier words. On this page you build one by hand, on a text you choose, then train it and watch what it learned. This first page explains the whole route before you set off.",
+  build(stage){
+    coach("Nothing to do here but read. Every idea below comes back, one per step, with your own numbers in it — press <b>Next step</b> when you're ready to pick a text.",true);
+    const L=el("div","lesson");stage.append(L);
+    const w=RUN.win;
+    L.innerHTML=`
+    <h3 class="big">One game: guess the next token</h3>
+    <p>Everything a language model does is one game, played over and over: <b>given the tokens so far, put odds on the next one.</b> After “the cat sat on the” a good model might say <span class="mono">mat 41% · rug 22% · wall 9% · …</span> — one number for every token it knows, adding up to 1. A chatbot's whole reply is produced this way, one token at a time: guess, write the token down, guess again with the reply so far as part of the input.</p>
+    <p>A guess is scored by its <b>surprise</b>: −ln p(the token that actually came next). Giving the truth 100% scores 0; giving it 1% scores 4.6. The average surprise over a text is the <b>loss</b>, and training is nothing more than pushing that number down.</p>
+    ${EX("Everyday version",`<p>Your phone keyboard's suggestions are this game with a small model; an assistant answering you is the same game with a very large one. Neither looks anything up — every token is a bet made from the tokens before it.</p>`)}
+
+    <h3 class="big">Why “look back” is the whole problem</h3>
+    <p>The next word rarely depends on the previous word alone:</p>
+    <ul>
+      <li>“The <b>keys</b> to the old wooden cabinet ___” — <i>are</i>, not <i>is</i>: the decision sits five words back.</li>
+      <li>“The trophy didn't fit in the suitcase because <b>it</b> was too ___” — to guess <i>big</i> you must decide what <i>it</i> refers to, which means reading <i>trophy</i> and <i>suitcase</i> again.</li>
+      <li>In a song or a poem, a repeated line tells you the next word outright — if you can remember the first time.</li>
+    </ul>
+    <p>A model that only knows the previous word (a <b>bigram</b> table) can do none of this. <b>Attention</b> is the mechanism that lets every position reach back to the earlier positions, decide for itself how much each one matters, and pull their information in. The deciding is done by arithmetic on numbers the model learns — nobody writes a rule.</p>
+    ${w?EX("On your text",`<p>In ${q(RUN.title)} the word ${q(w.tok)} appears at slot ${w.i0}, followed by ${q(w.a)}, and again at slot ${w.f}, followed by ${q(w.b)}. The word alone cannot tell you which comes next; the words before it can. That pair of slots is the running example of every step.</p>`):EX("On your text",`<p>When you pick a text on the next page, this tutorial finds a word in it that appears twice with different words after it — the situation attention exists to handle — and that word becomes the running example of every step.</p>`)}
+
+    <h3 class="big">The whole machine in one picture</h3>
+    <p>Text goes in on the left; odds on the next token come out on the right. Each box is one step of this tutorial, and you will do each one by hand before the model does it for you.</p>
+    ${flowDiagram()}
+    <p>Three things to hold on to while you walk through it:</p>
+    <ol>
+      <li><b>Everything is a strip of numbers.</b> A token becomes a strip of ${CFG.dModel} numbers; every later stage turns strips into other strips. The page draws each strip as ${CFG.dModel} coloured cells — blue negative, red positive — and you can tap any cell for its value and the formula that made it.</li>
+      <li><b>Attention is the only place where slots talk to each other.</b> Every other stage works on each slot separately. Attention lets a slot pull in a <em>blend</em> of the earlier slots, in proportions it computes itself.</li>
+      <li><b>Nothing is written in advance.</b> Every table starts random. Training moves the numbers until the odds match the text; the patterns you will see in step 11 were found, not designed.</li>
+    </ol>
+
+    <h3 class="big">The five lines</h3>
+    <p>Written the way a paper writes it, the whole model is five lines. You do not need to follow them yet — each is built in a step below, and you will meet them again at the end with your own numbers in them.</p>
+    ${FORM(`x₀ = E[ids] + P <span class="dim">— look up each token's strip, add its slot's strip (step 3)</span><br>A = softmax(mask(<span class="q">Q</span><span class="k">Kᵀ</span> ÷ √d)) <span class="dim">— every slot scores every earlier slot, then shares out (steps 4–7)</span><br>x₁ = x₀ + (A·<span class="v">V</span>)Wo <span class="dim">— blend the values in those shares, add back (step 8)</span><br>x₂ = x₁ + relu(x₁W1)W2 <span class="dim">— a feed-forward polish, one slot at a time (step 9)</span><br>p = softmax(x₂Wout) <span class="dim">— odds on the next token; its surprise is the loss (steps 9–10)</span>`)}
+    <p>with <span class="qtext">Q</span> = x₀Wq, <span class="ktext">K</span> = x₀Wk, <span class="vtext">V</span> = x₀Wv. Sizes on this page: T = ${CFG.context} slots, d = ${CFG.dModel} numbers per strip, one block, one attention head. Real models are the same five lines with bigger numbers, several heads and many stacked blocks — the <b>Beyond this model</b> page near the end says exactly what changes and why.</p>
+
+    <h3 class="big">The words this page uses</h3>
+    <div class="two">
+      <p><b>slot</b> — one of the ${CFG.context} positions in the window, numbered 0 to ${CFG.context-1}. Each holds one token.</p>
+      <p><b>strip</b> — a vector: a row of ${CFG.dModel} numbers, drawn as coloured cells.</p>
+      <p><b>the card</b> — a piece of card laid over everything to the right of a slot. It is the <em>causal mask</em>: a slot may not see its future.</p>
+      <p><b>pour / share out</b> — attention weights: 100% of a slot's attention divided among the slots it may see. The share-out is the <em>softmax</em>.</p>
+      <p><b>ask &amp; offer</b> — the query (what a slot is looking for) meeting the keys (what each slot offers).</p>
+      <p><b>the bowl</b> — the blend of values, one from every slot looked at, in the poured amounts.</p>
+      <p><b>polish</b> — the feed-forward layer.</p>
+      <p><b>bet</b> — the model's odds on the next token.</p>
+      <p><b>newborn / trained</b> — the model with its random starting numbers, and the same model after training. Most steps have a switch between the two.</p>
+      <p><b>receipt</b> — tap any drawn number and the bar under the stage prints the formula with the real values that produced it.</p>
+    </div>
+
+    <h3 class="big">How to use this page</h3>
+    <ul>
+      <li>Each step opens with a <b>Read first</b> lesson: the idea, why the model needs it, the math with its shapes, and a worked example small enough to check on paper. Collapse it if you already know the idea — the interactive part is below it, and the blue line above the stage always says what to do next.</li>
+      <li>Move things by <b>dragging</b>, or click a chip and then click its destination. Wrong moves are refused with a sentence that says why — that sentence is usually the point of the step.</li>
+      <li><b>Next step</b> unlocks when the step's one real task is done. <b>Reset step</b> restarts it. Your progress and the trained model are kept in this browser.</li>
+      <li>A model trains in the background as soon as you pick a text (about ten seconds). Steps that need the trained model wait for it.</li>
+    </ul>
+    <p class="helper">The route: pick a text → play the game yourself (1) → build the input (2–3) → look back by hand, then by arithmetic (4–8) → bet (9) → train (10) → read the trained model's mind (11) → let it write (12) → experiments, the five lines, what real models add, and a cheat sheet.</p>`;
+  }
+},
+
+/* ---------------- Pick your page ---------------- */
+{
+  id:"pick",label:"Pick a text",grp:"Start",dot:"·",eyebrow:"Start · your text",
   title:"Pick the page the machine will learn",
   lede:"This machine will learn one short text and nothing else. Pick it, and every number you see from here on — every strip, score, weight and guess — will come from it.",
+  primerTitle:"why a small text, and what happens when you pick one",
+  primer(){return `
+<p>The model on this page is tiny on purpose — a few thousand numbers, so that every one of them fits on the screen and every step can be done by hand. A model that small can only learn patterns that <em>repeat</em>. That is why the texts offered here are short and repetitive: a nursery rhyme, a poem with two near-identical stanzas, a sentence that reuses the same frame ten times.</p>
+${H4("What happens when you pick")}
+<ol>
+<li>The text is <b>chopped into tokens</b> (words, punctuation, line breaks) and every distinct token gets an id. Each card shows how many tokens the text has and how many distinct ones.</li>
+<li>A model is created with <b>random numbers</b> — always the same random numbers, so your run is reproducible — and starts <b>training in the background</b>: ${CFG.steps.toLocaleString()} small steps, each on ${CFG.batch} random ${CFG.context}-token windows. It takes about ten seconds; the card in the left rail shows its progress.</li>
+<li>One <b>${CFG.context}-token window</b> of the text is chosen as the running example. It is chosen so that some word appears twice in it with <em>different</em> words after it — the one situation where the previous word alone cannot tell you what comes next, and looking further back can.</li>
+</ol>
+${EX("Why the window matters",`<p>Every later step is played on those ${CFG.context} slots. When you pour attention by hand (step 4), score keys (step 5) or read the trained attention map (step 11), you are always looking at the same window, so what you did can be compared with what the model learned.</p>`)}
+${H4("Pasting your own text")}
+<p>Anything works that has at least ${CFG.context+2} tokens, fewer than 400 distinct ones, and some repetition. A verse with a refrain is ideal. Very varied prose gives the tiny model nothing to hold on to: its odds stay flat and the later steps are less interesting.</p>
+${TODO(`<p>Tap a text. Then look at the sixteen slots that appear under the cards and find the highlighted pair — the same word twice, with different words after it.</p>`)}`;},
   build(stage){
     coach("Pick the page we'll play on. You'll be stuck with it, on purpose: one text, one continuous story.");
     const route=el("div","route");
@@ -2611,9 +2918,27 @@ const SCENES=[
 
 /* ---------------- 1 · Cover and guess ---------------- */
 {
-  label:"Cover & guess",grp:"Play",eyebrow:"Step 1 · play",needsText:true,
+  id:"cover",dot:"1",label:"Cover & guess",grp:"Play",eyebrow:"Step 1 · play",needsText:true,
   title:"Cover the page and guess the next word",
-  lede:"A language model plays exactly one game: given the words so far, guess the next one. Play it yourself first — on your text — before any machinery.",
+  lede:"A language model plays exactly one game: given the words so far, guess the next one. Play it yourself first — on your text — before any machinery, so that everything built later has a purpose you have felt.",
+  primerTitle:"the game, how it is scored, and why three rounds",
+  primer(){const w=RUN.win,V=RUN.V;const rows=[[1,"certain and right — the best possible score"],[0.5,"a coin toss between two options"],[0.1,"one chance in ten"],[1/V,`a blind guess over all ${V} tokens — where the untrained model starts`]];return `
+<p>Before any machinery, play the machine's game yourself. The rule: <b>everything to the right of a slot is covered; guess what is under the card, one slot on.</b> A language model plays exactly this at every slot of every text it ever reads.</p>
+${H4("How a guess is scored")}
+<p>You will guess one word. The model does something more careful: it puts <b>odds</b> on <em>every</em> token in the vocabulary — ${V} numbers that add up to 1. It is then scored by how much probability it gave the token that actually came next. That score is the <b>surprise</b>, −ln p(truth):</p>
+<div class="tblwrap"><table class="tbl"><tr><th>odds on the truth</th><th>surprise −ln p</th><th>meaning</th></tr>
+${rows.map(([p,m],k)=>`<tr><td class="num">${k===3?`1 ÷ ${V} = `:""}${num(p,3)}</td><td class="num">${num(-Math.log(p),2)}</td><td>${m}</td></tr>`).join("")}</table></div>
+<p>The average surprise over many slots is the <b>loss</b>. It is the one number that training pushes down, and you will watch it fall in step 10. Your single-word guess is the extreme case: all your odds on one token — surprise 0 if you are right, unbounded if you are wrong.</p>
+${H4("The three rounds")}
+<ul>
+<li><b>Round 1</b> is a slot where the previous word alone nearly settles it. A table of “what usually follows each word” would get it right.</li>
+<li><b>Round 2</b> is the slot this whole tutorial is about: ${q(w.tok)} at slot ${w.f}. The same word sits at slot ${w.i0}, followed there by ${q(w.a)}. To guess what follows it <em>here</em> you have to read the words before it — you have to <b>look back</b>.</li>
+<li><b>Round 3</b> is a genuinely open slot: the text continues in several ways after that word. There is no single right guess; a good model spreads its odds instead of picking one.</li>
+</ul>
+${EX("What the grey bars show",`<p>To the right is the untrained model's bet for the same slot: about ${(1/V).toFixed(3)} on each of its ${V} tokens, because its numbers are still random. Keep that flat shape in mind; by step 10 the bars will have moved.</p>`)}
+${H4("The context window")}
+<p>The model can only see ${CFG.context} slots at a time. That is its <b>context window</b>: anything further back is invisible to it, however useful. Real models have windows of thousands to millions of tokens; the principle is the same.</p>
+${TODO(`<p>Drag a word from the shelf onto the covered slot (or click the word, then the slot). Read the note after each round — it says what information the guess needed. Three rounds unlock the next step.</p>`)}`;},
   build(stage){
     const w=RUN.win,r=RUN.rounds,V=RUN.V;
     const order=[r.A,r.f,r.C];let round=0;const results={};
@@ -2674,9 +2999,23 @@ const SCENES=[
 
 /* ---------------- 2 · Chop it up ---------------- */
 {
-  label:"Chop",grp:"Build",eyebrow:"Step 2 · build",needsText:true,
+  id:"chop",dot:"2",label:"Chop",grp:"Build",eyebrow:"Step 2 · build",needsText:true,
   title:"Chop the text into tokens",
-  lede:"The machine can't hold words. It holds whole numbers — so the text is chopped into tokens, and each distinct token gets an id. Cut the pieces that are still stuck together.",
+  lede:"The machine can't hold words. It holds whole numbers — so the text is chopped into tokens, and each distinct token gets an id. Cut the pieces that are still stuck together, then count.",
+  primerTitle:"tokens, ids, and what real tokenizers do differently",
+  primer(){const text=RUN.text;const chars=text.replace(/\s+/g,"").length;const distinctChars=new Set(text.toLowerCase().replace(/\s+/g,"")).size;return `
+<p>A model computes with numbers, so the first job is to turn text into a sequence of whole numbers. That takes two decisions: <b>what counts as one piece</b> (a token), and <b>which number each piece gets</b> (its id).</p>
+${H4("What counts as a token")}
+<p>This page uses <b>word-level</b> tokens: every word, every punctuation mark and every line break is one token, all lower-cased. Punctuation gets its own token because “cat” and “cat,” are the same word — if they stayed glued together the model would have to learn what “cat” means twice, once per spelling, from half the evidence each time.</p>
+<div class="tblwrap"><table class="tbl"><tr><th>if the pieces were…</th><th>your text becomes</th><th>distinct pieces</th><th>the trade-off</th></tr>
+<tr><td>single characters</td><td class="num">${chars.toLocaleString()} tokens</td><td class="num">${distinctChars}</td><td>tiny vocabulary, but very long sequences, and every word has to be learned letter by letter</td></tr>
+<tr class="hl"><td>whole words (this page)</td><td class="num">${RUN.ids.length.toLocaleString()} tokens</td><td class="num">${RUN.V}</td><td>short sequences and attention maps that read as words looking at words — but every unseen word is a stranger</td></tr>
+<tr><td>sub-word pieces (real models)</td><td colspan="2">in between</td><td>common words stay whole, rare words split into familiar pieces (“token” + “ization”), any spelling can be represented; 30k–200k pieces</td></tr></table></div>
+<p>Real models learn their pieces with <b>byte-pair encoding</b> (BPE): start from single characters and repeatedly merge the most frequent adjacent pair until the vocabulary is the wanted size. The Python version of this project does exactly that; the web page keeps whole words so that later steps stay readable.</p>
+${H4("Ids carry no meaning")}
+<p>Here ids are handed out by frequency — the most common token gets 0, the next 1, and so on — but any assignment would work just as well. An id is a drawer label. Nothing about a word is stored in its number; what the model knows about a token will live in a table you fetch from in the next step.</p>
+${EX("Why the line break is a token",`<p>The model must learn where lines end, just as it learns where sentences end. ↵ is drawn as a visible glyph on this page so you can watch it being predicted like any other token.</p>`)}
+${TODO(`<ol><li>If any tile in the window still has punctuation glued to it, drag the <b>scissors</b> onto it. Try the scissors on a whole word too — the refusal explains the rule.</li><li>Before counting, bet which tile will get id 0 (the most frequent token in the whole text) by tapping it.</li><li>Press <b>Count the whole text</b> and read the vocabulary table.</li></ol>`)}`;},
   build(stage){
     const w=RUN.win;
     // raw tiles: the window's text split on spaces; punctuation is still glued to its word
@@ -2743,14 +3082,29 @@ const SCENES=[
 
 /* ---------------- 3 · Look up the strip, add the slot ---------------- */
 {
-  label:"Look up",grp:"Build",eyebrow:"Step 3 · build",needsText:true,
+  id:"lookup",dot:"3",label:"Look up",grp:"Build",eyebrow:"Step 3 · build",needsText:true,
   title:"Look up each token's strip, then add its slot",
-  lede:"An id is a row number in a table of 16 numbers. Fetch each slot's row — then notice two of them are identical, and fix that.",
+  lede:"An id picks a row in a learned table: the token's embedding, a strip of 16 numbers. Fetch each slot's row — then notice that two slots got the very same strip, and fix that by adding where each slot is.",
+  primerTitle:"embeddings, positions, and the input x₀",
+  primer(){const w=RUN.win,D=CFG.dModel,T=CFG.context,t=TOY;return `
+<p>An id is a row number. The model keeps a table <b>E</b> with one row per token in the vocabulary, and each row is a <b>strip</b> of ${D} numbers. Fetching a slot's strip is a plain lookup: slot i holds id k, so copy row k of E. That strip is the token's <b>embedding</b> — everything the model knows about the token, and all of it learnable.</p>
+${H4("Why a strip of numbers")}
+<p>Because arithmetic can act on strips. Two tokens used in similar ways can end up with similar strips (you will check this in the experiments at the end), and every later stage compares strips, blends them and transforms them with matrix multiplications. At birth each cell of E is a small random number; no cell means anything you could name, before or after training.</p>
+${H4("Why positions must be added")}
+<p>Attention — the mechanism of steps 4 to 8 — compares strips with strips. It has <em>no idea where a strip came from</em>: if two slots hold the same word they hold the same strip, and attention would treat “dog bites man” and “man bites dog” as the same bag of words. So a second table <b>P</b>, with one strip per <em>slot</em>, is added on top:</p>
+${FORM(`x₀[i] = E[id of slot i] + P[i] <span class="dim">— one row per slot; x₀ is ${T} × ${D}</span>`)}
+<p>Now the same word at two different slots has two different strips. P is learned here, like E. The original transformer used fixed sine waves instead, and most current models apply a rotation inside attention (RoPE); the <b>Beyond this model</b> page compares them.</p>
+${EX("Worked example with strips of two numbers",`<p>Three tokens, “the cat sat”, and d = 2 so you can check every sum:</p>
+<div class="tinyrow">${tinyMat(t.E,{name:"E — one row per token",rows:t.vocab})}<span class="op">+</span>${tinyMat(t.P,{name:"P — one row per slot",rows:["slot 0","slot 1","slot 2"]})}<span class="op">→</span>${tinyMat(t.x0,{name:"x₀ = E[id] + P[slot]",rows:t.words.map((x,i)=>i+" "+x)})}</div>
+<p>Slot 1 holds “cat”: row 1 of E is (${num(t.E[1][0])}, ${num(t.E[1][1])}), P[1] is (${num(t.P[1][0])}, ${num(t.P[1][1])}), so x₀[1] = (${num(t.x0[1][0])}, ${num(t.x0[1][1])}). If slot 2 held “the” as well, it would get E[the] + P[2] = (${num(t.E[0][0]+t.P[2][0])}, ${num(t.E[0][1]+t.P[2][1])}) — different from slot 0's (${num(t.x0[0][0])}, ${num(t.x0[0][1])}), thanks to P alone.</p>`)}
+${H4("On your window")}
+<p>${q(w.tok)} sits at slot ${w.i0} and at slot ${w.f}. Both hold id ${w.ids[w.f]}, so both fetch the same row of E — identical, cell for cell — even though one is followed by ${q(w.a)} and the other by ${q(w.b)}. Adding P is what tells them apart; looking back (from step 4) is what lets the second one use the difference.</p>
+${TODO(`<ol><li>Tap slot ${w.i0} and slot ${w.f} in the strip to fetch their rows from E, and compare them.</li><li>Fetch the rest, then drag the position strips <b>P[${w.f}]</b> and <b>P[${w.i0}]</b> onto their rows (a strip refuses the wrong row and says why).</li><li>Add the rest. Then flip the <b>weights</b> switch to see the same tables after training: same shape, moved numbers.</li></ol>`)}`;},
   build(stage){
     const w=RUN.win,D=CFG.dModel,T=CFG.context;
     let trained=false;
     const fresh=freshModel();
-    coach(`Tap slot <b>${w.i0}</b>, then slot <b>${w.f}</b> in the strip. Same word, ${q(w.tok)} — watch the rows.`);
+    coach(`Tap slot <b>${w.i0}</b>, then slot <b>${w.f}</b> in the strip on the right. Each tap fetches that slot's row from the table E on the left into the grid x₀. Both slots hold ${q(w.tok)} — compare the two rows you get.`);
     const cols=el("div","cols w3");stage.append(cols);
     const leftCol=el("div",""),rightCol=el("div","");cols.append(leftCol,rightCol);
     // E table
@@ -2825,9 +3179,23 @@ const SCENES=[
 
 /* ---------------- 4 · Where would you look? ---------------- */
 {
-  label:"Pour",grp:"Look back",eyebrow:"Step 4 · look back",needsText:true,
+  id:"pour",dot:"4",label:"Pour",grp:"Look back",eyebrow:"Step 4 · look back",needsText:true,
   title:"Where would you look?",
-  lede:"You are the slot at the edge of the card. You know your own word and your position, and nothing else. To guess what comes next you need to look back — so decide how much to look at each earlier slot.",
+  lede:"You are the slot at the edge of the card. You know your own word and your position, and nothing else. To guess what comes next you need to look back — so decide, by hand, how much to read from each earlier slot. That row of amounts is what attention computes.",
+  primerTitle:"what attention weights are, before the model computes them",
+  primer(){const w=RUN.win,f=w.f,n=f+1,t=TOY;const reader=[0.02,0.50,0.03,0.08,0.02,0.02,0.18,0.05,0.10];return `
+<p>Here is attention in one sentence: <b>to guess what comes next, a slot pulls in a blend of the earlier slots, and it decides for itself how much of each to take.</b> The amounts are the <b>attention weights</b>. This step has you choose them by hand, so that in the next four steps you can see how the model computes the same kind of row from nothing but numbers.</p>
+${H4("The rules of a row of weights")}
+<ul>
+<li>One weight per slot the current slot may see: itself and everything to its left. Slots to the right are under the card and get exactly 0 — that is what <b>causal</b> means (step 6 makes it precise).</li>
+<li>Weights are <b>non-negative</b> and <b>sum to 1</b>: they are proportions of a blend, like a recipe. Summing to 1 keeps the blend the same size however many slots are visible.</li>
+<li>A slot may look at itself. Trained models often do, when the current word is itself the most useful clue.</li>
+</ul>
+${EX("Where a reader would look",`<p>“The trophy didn't fit in the suitcase because <b>it</b> was too big.” Guessing the word after <i>it</i> means deciding what <i>it</i> is. A reader might put most of the weight on <i>trophy</i>, some on <i>suitcase</i>, a little on <i>fit</i>, and almost none on <i>the</i> or <i>because</i>. Written as a row over the nine visible words, that judgement is one row of attention weights:</p>${tinyVec(reader,{cols:["The","trophy","didn't","fit","in","the","suitcase","because","it"],digits:2})}<p class="helper">an illustration of a reader's judgement, not a model's output — the model's own rows appear from step 7 on</p>`)}
+${EX("What one computed row looks like",`<p>In the two-number toy model, slot 2 (“sat”) ends up with this row over its three visible slots:</p><div class="tinyrow">${tinyVec(t.A[2],{cols:t.words.map((x,i)=>i+" "+x),digits:3})}</div><p>Three positive numbers summing to 1, most on itself, least on “the”. Steps 5, 6 and 7 show exactly how those numbers are produced.</p>`,"k")}
+${H4("On your window")}
+<p>You are ${slotName(f)}. To guess what follows, which of the ${n} visible slots would you read? The same word at slot ${w.i0} was followed by ${q(w.a)}, so the useful clues are probably the words <em>around</em> the earlier ${q(w.tok)} that differ from the words around you — that is what makes this slot's answer different.</p>
+${TODO(`<p>Pour 100% of your attention over the visible slots, 10% per tap (the + and − buttons, or tap a gauge). Slots under the card refuse, and say why. When you reach 100% your row is sealed as a bet: in step 10 it is held up against the row the trained model produces for the same slot.</p>`)}`;},
   build(stage){
     const w=RUN.win,f=w.f,n=f+1;
     coach(`You are ${slotName(f)}. Pour <b>100%</b> of your attention over the slots you'd want to read to guess what follows ${q(w.tok)} — 10% per tap, and a slot may include itself.`);
@@ -2879,13 +3247,33 @@ const SCENES=[
 },
 /* ---------------- 5 · Ask and offer ---------------- */
 {
-  label:"Ask & offer",grp:"Look back",eyebrow:"Step 5 · look back",needsText:true,
+  id:"ask",dot:"5",label:"Ask & offer",grp:"Look back",eyebrow:"Step 5 · look back",needsText:true,
   title:"Ask and offer: the query meets the keys",
-  lede:"Your slot has 16 numbers; every earlier slot has 16 numbers. The only move available is multiply-and-add — a dot product. But the model doesn't compare the raw strips.",
+  lede:"Your slot has 16 numbers; every earlier slot has 16 numbers. The one natural way to compare two strips is multiply-and-add — a dot product. But the model doesn't compare the raw strips: it compares two learned summaries of them, the query and the key.",
+  primerTitle:"dot products, queries, keys, scores, and the √d",
+  primer(){const w=RUN.win,f=w.f,D=CFG.dModel,t=TOY;const q2=t.Q[2];return `
+<p>Your slot must now produce a row like the one you just poured — from numbers alone. All it has is its own strip of ${D} numbers and the strips of the earlier slots. There is one natural way to compare two strips: the <b>dot product</b>.</p>
+${H4("The dot product")}
+<p>Multiply the two strips cell by cell, then add the products up. The result is large and positive when the strips point the same way, near zero when they are unrelated, negative when they point opposite ways.</p>
+${EX("Two-number examples",`<p>(2, 1) · (1, 1) = 2×1 + 1×1 = <b>3</b> &nbsp;·&nbsp; (2, 1) · (1, 0) = 2×1 + 1×0 = <b>2</b> &nbsp;·&nbsp; (2, 1) · (0, 1) = 2×0 + 1×1 = <b>1</b> &nbsp;·&nbsp; (2, 1) · (−1, 2) = −2 + 2 = <b>0</b></p>`)}
+${H4("Why not compare the raw strips")}
+<p>If a slot compared its own strip x₀ with the others' directly, the biggest score would always go to <em>look-alikes</em>: ${q(w.tok)} would find the other ${q(w.tok)}. But what a slot needs is usually a <em>different</em> word — the word before the earlier ${q(w.tok)}, say. So the model makes two different summaries of every strip, with two learned ${D} × ${D} matrices:</p>
+${FORM(`<span class="q">q<sub>i</sub></span> = x₀[i] · Wq <span class="dim">— the query: what slot i is looking for</span><br><span class="k">k<sub>j</sub></span> = x₀[j] · Wk <span class="dim">— the key: how slot j advertises itself</span><br>S[i][j] = <span class="q">q<sub>i</sub></span> · <span class="k">k<sub>j</sub></span> ÷ √d <span class="dim">— the score of slot i looking at slot j</span>`)}
+<p>Because Wq and Wk are different, “what I am looking for” and “what I offer” are two different views of the same numbers, and training can shape them so that the right slots find each other. Note the asymmetry: S[i][j] is i's query against j's key, which is not the same number as S[j][i].</p>
+${EX("Library analogy",`<p>You walk in with a question (the <span class="qtext">query</span>). Every book has an index card describing what it contains (its <span class="ktext">key</span>). You compare your question with every card and take books in proportion to the match. What you actually carry home is the book's contents — a third thing, the <span class="vtext">value</span>, which arrives in step 8.</p>`,"k")}
+${H4("Why divide by √d")}
+<p>A dot product of two strips of ${D} random numbers is a sum of ${D} random products, and its typical size grows like √${D} = ${Math.sqrt(D)}. Dividing by √d keeps a newborn model's scores near zero, so that the share-out of step 7 starts <em>soft</em> — spread over every slot — instead of locking onto one slot by chance before training has said anything. It is a bookkeeping constant, but without it large models train badly: the share-out saturates and the gradients through it vanish.</p>
+${EX("Worked example with d = 2",`<div class="tinyrow">${tinyMat(t.x0,{name:"x₀",rows:t.words.map((x,i)=>i+" "+x)})}<span class="op">·</span>${tinyMat(t.Wq,{name:"Wq"})}<span class="op">=</span>${tinyMat(t.Q,{name:"Q — queries",rows:t.words,hl:[[2,null]]})}</div>
+<div class="tinyrow">${tinyMat(t.x0,{name:"x₀",rows:t.words.map((x,i)=>i+" "+x)})}<span class="op">·</span>${tinyMat(t.Wk,{name:"Wk"})}<span class="op">=</span>${tinyMat(t.K,{name:"K — keys",rows:t.words})}</div>
+<p>Slot 2's query is (${num(q2[0])}, ${num(q2[1])}). Its scores against the three keys, each divided by √2 = ${num(Math.SQRT2,3)}:</p>
+<ul>${[0,1,2].map(j=>`<li>against slot ${j} (“${t.words[j]}”): ${dotStr(q2,t.K[j])} → ÷ √2 → <b>${num(t.S[2][j],3)}</b></li>`).join("")}</ul>
+<p>Every query against every key gives the whole score matrix — rows ask, columns answer; row 2 is the one worked above:</p><div class="tinyrow">${tinyMat(t.S,{name:"S = Q·Kᵀ ÷ √2",rows:t.words,cols:t.words,digits:3,hl:[[2,null]]})}</div>`)}
+<p>Scores can be any size and any sign, and a row of them does not sum to 1. They are not weights yet: step 6 hides the future, step 7 shares them out.</p>
+${TODO(`<ol><li>Drag slot ${f}'s <b>query</b> onto two keys. The tape shows the ${D} products and their sum.</li><li>Try dropping it on a Q tag, a V tag or the raw strip — each refusal states a rule.</li><li>Score the rest. Then flip to <b>Peek: after training</b> and drop the query on the key you think scores highest.</li></ol>`)}`;},
   build(stage,token){
     const w=RUN.win,f=w.f,n=f+1,D=CFG.dModel;
     let trained=false,manual=0,scored=new Set(),beat=1,peekDone=false;
-    coach(`Comparing x₀ to x₀ would only find look-alikes — and ${q(w.tok)} looking for ${q(w.tok)} is useless. So the model makes <b>two summaries</b> of every strip: <span class="qtext">Wq</span> turns x₀ into <em>what I'm looking for</em>, <span class="ktext">Wk</span> into <em>what I'm offering</em>. Drag slot ${f}'s <b>query</b> onto two keys.`);
+    coach(`On the left: slot ${f}'s <span class="qtext">query</span> (its strip × Wq). On the right: the <span class="ktext">keys</span> of every slot it may see (each strip × Wk). Drag the query onto a key — the tape shows the ${D} products, their sum, and the score. Do two by hand.`);
     const s=slotStrip(w.tokens.slice(0,17),{card:f,focus:f});s.tiles[16].classList.add("extra");stage.append(s.el);
     const cols=el("div","cols w3");stage.append(cols);
     const left=el("div",""),right=el("div","");cols.append(left,right);
@@ -2998,9 +3386,20 @@ const SCENES=[
 
 /* ---------------- 6 · The card, for everyone ---------------- */
 {
-  label:"The card",grp:"Look back",eyebrow:"Step 6 · look back",needsText:true,
+  id:"card",dot:"6",label:"The card",grp:"Look back",eyebrow:"Step 6 · look back",needsText:true,
   title:"The card, for everyone at once",
-  lede:"The model doesn't do one slot at a time. All 16 rows of scores are computed in a single pass — which is exactly why the future has to be hidden.",
+  lede:"The model doesn't do one slot at a time. All 16 rows of scores are computed in a single pass — which is exactly why the future has to be hidden. The card is the causal mask.",
+  primerTitle:"the causal mask: why the future is hidden and how",
+  primer(){const w=RUN.win,f=w.f,T=CFG.context,t=TOY;return `
+<p>The model does not handle one slot at a time. The matrix product Q·Kᵀ produces <em>all</em> ${T} × ${T} scores in one go: row i is slot i's query against every key — including the keys of the slots to its right. That is efficient, and it creates a problem.</p>
+${H4("Why the future must be hidden")}
+<p>During training the whole window is fed in at once, and the target for slot i is the token at slot i+1 — which is <em>sitting right there in the input</em>. If slot i could look at slot i+1, the cheapest way to lower the loss would be to copy it. The model would learn to peek, not to predict; and at writing time, when the next token does not exist yet, it would be useless. The experiments page has a twin trained without the card, so you can see this happen.</p>
+${H4("How it is done")}
+${FORM(`S[i][j] = −∞ &nbsp;for every j &gt; i <span class="dim">— applied before softmax, so that e<sup>−∞</sup> = 0 and slot j gets exactly no share</span>`)}
+<p>In code the “−∞” is a very large negative number (−10⁹ here). Because the mask is applied <em>before</em> the share-out of step 7, the visible slots still get weights that sum to 1 among themselves, and the hidden ones get 0 exactly — not merely something small. The diagonal is kept: a slot may look at itself.</p>
+${EX("The pattern, on the toy model",`<div class="tinyrow">${tinyMat(t.S,{name:"scores S",rows:t.words,cols:t.words,digits:3})}<span class="op">→ mask →</span>${tinyMat(t.S,{name:"masked scores",rows:t.words,cols:t.words,digits:3,mask:(i,j)=>j>i})}</div><p>A staircase: row 0 sees only itself, row 1 sees slots 0 and 1, the last row sees everything. The hatched cells are the card.</p>`)}
+${EX("Decoders, encoders, and the card",`<p>A model trained with this mask reads left to right and can generate text: GPT-style models are <b>decoders</b>. Drop the mask and every slot sees the whole sentence — a <b>bidirectional encoder</b> (BERT-style), excellent at understanding a finished sentence but unable to write one token at a time. A translation system uses both, an encoder over the source sentence and a decoder over the translation so far; more on the <b>Beyond this model</b> page.</p>`,"k")}
+${TODO(`<p>Three rows are lit in turn: row ${f>6?3:10}, your row ${f}, and the last row. For each, tap the <em>first</em> column it must not see and press Confirm — or say there is nothing to hide, when that is true.</p>`)}`;},
   build(stage){
     const w=RUN.win,f=w.f,T=CFG.context;
     const c=fwd0();
@@ -3045,9 +3444,25 @@ const SCENES=[
 
 /* ---------------- 7 · Share it out ---------------- */
 {
-  label:"Share out",grp:"Look back",eyebrow:"Step 7 · look back",needsText:true,
+  id:"share",dot:"7",label:"Share out",grp:"Look back",eyebrow:"Step 7 · look back",needsText:true,
   title:"Share it out: scores become weights",
-  lede:"Softmax turns any row of scores into shares: all positive, summing to exactly one. Feel what that means before you see the formula.",
+  lede:"Softmax turns any row of scores into shares: all positive, summing to exactly one, larger where the score is larger. Feel what a fixed budget means with the sliders, then check it against the formula.",
+  primerTitle:"softmax: from scores to a row that sums to one",
+  primer(){const w=RUN.win,f=w.f,n=f+1,t=TOY;const row=t.S[2];const sm=r=>softmaxVec(r);return `
+<p>A row of scores has to become a row of <b>shares</b>: all positive, summing to exactly 1, and larger where the score is larger. The function that does it is the <b>softmax</b>:</p>
+${FORM(`A[i][j] = e<sup>S[i][j]</sup> ÷ Σ<sub>k</sub> e<sup>S[i][k]</sup> <span class="dim">— raise e to each score, then divide by the row's total</span>`)}
+${H4("Four things to know about it")}
+<ol>
+<li><b>Always positive, always summing to 1.</b> e<sup>x</sup> is positive for any x, and dividing by the total makes the row add up. So a row of attention weights is a fixed budget: raising one share must lower the others.</li>
+<li><b>Order-preserving and exponential.</b> A higher score always gets a bigger share, and a lead of 1 in score is worth a factor of e ≈ 2.72 in share; a lead of 3 is worth about 20×. Leads are rewarded steeply.</li>
+<li><b>Shifting every score by the same amount changes nothing</b> — only the differences matter. (That is also the numerical trick used in the code: subtract the row's largest score before exponentiating, so no e<sup>x</sup> overflows.)</li>
+<li><b>Scaling the scores changes the sharpness.</b> Doubled scores give a peakier row, halved scores a flatter one. That is what the √d of step 5 and the temperature of step 12 are about.</li>
+</ol>
+${EX("Worked example: row 2 of the toy model",softmaxRowHtml(row,t.words))}
+${EX("The same row, shifted and doubled",`<p>Add 1 to every score → weights ${tinyVec(sm(row.map(x=>x+1)),{digits:3})} unchanged. Double every score → ${tinyVec(sm(row.map(x=>x*2)),{digits:3})} sharper: the leader gains, the rest lose.</p>`,"k")}
+${H4("And the card")}
+<p>A masked score of −∞ gives e<sup>−∞</sup> = 0: exactly no share, and the visible slots' shares still sum to 1. A newborn model's scores are all close to zero, so its rows come out nearly flat — ${(1/n).toFixed(3)} each over the ${n} slots your row can see.</p>
+${TODO(`<ol><li>Push the slot the instruction names above a share of 0.5 by moving its slider — and watch every other share fall without being touched.</li><li>Raise a second slot to 0.2 <em>without moving its own slider</em>: only the others'.</li><li>Flip to the trained scores, guess the top share, reveal, then snap back to the newborn's scores.</li></ol>`)}`;},
   build(stage,token){
     const w=RUN.win,f=w.f,n=f+1,T=CFG.context;
     const S0=fwd0().Smasked[f].slice(0,T);
@@ -3121,9 +3536,25 @@ const SCENES=[
 
 /* ---------------- 8 · Blend and add back ---------------- */
 {
-  label:"Blend",grp:"Look back",eyebrow:"Step 8 · look back",needsText:true,
+  id:"blend",dot:"8",label:"Blend",grp:"Look back",eyebrow:"Step 8 · look back",needsText:true,
   title:"Blend the values, add it back",
-  lede:"The shares decide how much of each earlier slot gets carried over. What gets carried is not the key — it's a third summary of the same strip: the value.",
+  lede:"The shares decide how much of each earlier slot gets carried over. What gets carried is not the key — it's a third summary of the same strip, the value. The blend is then added to the slot, never swapped in.",
+  primerTitle:"values, the weighted blend, Wo, and the residual",
+  primer(){const w=RUN.win,f=w.f,D=CFG.dModel,t=TOY;const A2=t.A[2];return `
+<p>The shares say <em>how much</em> of each earlier slot to take. This step says <em>what</em> is taken. It is not the key — the key was only the advertisement — but a third summary of the same strip, the <b>value</b>:</p>
+${FORM(`<span class="v">v<sub>j</sub></span> = x₀[j] · Wv <span class="dim">— what slot j hands over when it is looked at</span><br>C[i] = Σ<sub>j</sub> A[i][j] · <span class="v">v<sub>j</sub></span> <span class="dim">— the blend: a weighted average of the visible values</span><br>x₁[i] = x₀[i] + C[i] · Wo <span class="dim">— through one more matrix, then added back to the slot</span>`)}
+${H4("Why three summaries and not one")}
+<p>Query, key and value are three learned views of one strip. Keeping them separate lets a slot <em>advertise</em> one thing (“I am a noun near the start of the line”) and <em>deliver</em> another (“the word after me was ${q(w.a)}”). With a single view it could not do both at once.</p>
+${H4("Why a blend, not a copy")}
+<p>C[i] is a weighted average, so it is never any one slot's value unless that slot's share is 1. With even shares it is the plain average of all visible values; with peaked shares it leans toward the winners. Attention <em>moves information between slots</em>; it makes no decision of its own — the decision is made later, from x₂, by Wout.</p>
+${EX("Worked example with d = 2",`<div class="tinyrow">${tinyMat(t.V,{name:"V = x₀·Wv — values",rows:t.words})}<span class="op">&nbsp;</span>${tinyMat([A2],{name:"row 2 of A (from step 7)",cols:t.words,digits:3})}</div>
+<p>C[2] = ${A2.map((a,j)=>`${num(a,3)}·(${num(t.V[j][0])}, ${num(t.V[j][1])})`).join(" + ")} = <b>(${num(t.C[2][0],3)}, ${num(t.C[2][1],3)})</b> — a point between the three values, nearest the one with the biggest share.</p>
+<div class="tinyrow">${tinyMat(t.Wo,{name:"Wo — chosen here as a plain halving"})}</div><p>Then C[2]·Wo = (${num(t.attnOut[2][0],3)}, ${num(t.attnOut[2][1],3)}), and x₁[2] = x₀[2] + C[2]·Wo = (${num(t.x0[2][0])}, ${num(t.x0[2][1])}) + (${num(t.attnOut[2][0],3)}, ${num(t.attnOut[2][1],3)}) = <b>(${num(t.x1[2][0],3)}, ${num(t.x1[2][1],3)})</b>.</p>`)}
+${H4("Why add back instead of replace")}
+<p>The <b>residual connection</b> x₁ = x₀ + … keeps the slot's own identity: it is still ${q(w.tok)} at position ${f}, now enriched with what it read. Two more reasons matter in big models: adding lets gradients flow straight through dozens of stacked blocks during training, and each block then only has to learn a <em>correction</em> to what is already there. Real models also rescale the strip before each stage (<b>layer normalization</b>), omitted here because a one-block model trains fine without it.</p>
+${H4("What Wo is for")}
+<p>Wo is one more learned ${D} × ${D} matrix that maps the blend back into the slot's own coordinate system before it is added. In a multi-head model it is also where the heads' separate blends are stitched together (see <b>Beyond this model</b>).</p>
+${TODO(`<ol><li>Drag two values into the bowl; the amounts (A[${f}][j]) are already measured. Try dragging a K tag to see it refused.</li><li>Pour the rest, tap <b>· Wo</b>, then <b>Add back to slot ${f}</b> and compare x₀, the addition, and x₁.</li></ol>`)}`;},
   build(stage){
     const w=RUN.win,f=w.f,n=f+1,D=CFG.dModel,T=CFG.context;
     let trained=false;const cur=()=>fwdFor(trained);
@@ -3202,9 +3633,22 @@ const SCENES=[
 },
 /* ---------------- 9 · Place your bet ---------------- */
 {
-  label:"Bet",grp:"Guess",eyebrow:"Step 9 · guess",needsText:true,
+  id:"bet",dot:"9",label:"Bet",grp:"Guess",eyebrow:"Step 9 · guess",needsText:true,
   title:"Place your bet",
-  lede:"The rest of the block turns your slot's strip into a bet on the next token — one score per vocabulary entry. Bet first; then see what the newborn thinks.",
+  lede:"The rest of the block turns your slot's strip into a bet on the next token: a feed-forward polish, then one score per vocabulary entry, then a softmax into odds. Bet first; then see what the newborn thinks, and how its bet is scored.",
+  primerTitle:"the feed-forward layer, logits, odds, and the loss",
+  primer(){const w=RUN.win,f=w.f,D=CFG.dModel,H=CFG.mlpHidden,V=RUN.V,t=TOY;const lg=t.logits[2],pr=t.probs[2];return `
+<p>After attention, slot ${f}'s strip holds its own word, its position and a blend of what came before. Two more stages turn that strip into a <b>bet</b>: odds on every token in the vocabulary.</p>
+${H4("The feed-forward layer (the polish)")}
+${FORM(`x₂[i] = x₁[i] + relu(x₁[i] · W1) · W2 <span class="dim">— W1 is ${D} × ${H}, W2 is ${H} × ${D}; relu(x) = max(0, x)</span>`)}
+<p>It is applied to <em>each slot on its own</em>: no slot sees another here. The strip is widened to ${H} numbers, every negative number is clipped to zero, and the result is narrowed back and added to the slot. Apart from the two softmaxes, that clip is the only non-linear operation in the model — and without it the whole network would collapse into one big matrix multiplication, able to express only straight-line relationships. A useful picture: attention <em>gathers</em> information from other slots; the feed-forward layer <em>processes</em> it within the slot. In large models these layers hold most of the parameters, and much of what the model “knows”.</p>
+${H4("From a strip to odds")}
+${FORM(`logits = x₂[i] · Wout <span class="dim">— Wout is ${D} × ${V}: one raw score per token</span><br>p = softmax(logits) <span class="dim">— the same share-out as step 7, now over the vocabulary</span>`)}
+<p>The <b>logits</b> are unbounded scores; softmax turns them into ${V} probabilities that sum to 1. The slot's <b>loss</b> is its surprise at the token that actually came next: −ln p(truth).</p>
+${EX("Worked example with d = 2",`<p>Toy slot 2 after the polish: x₂[2] = (${num(t.x2[2][0],3)}, ${num(t.x2[2][1],3)}). Multiply by a 2 × 3 output matrix to get one logit per token, then share out:</p><div class="tinyrow">${tinyMat(t.Wout,{name:"Wout",cols:t.vocab})}<span class="op">→</span>${tinyVec(lg,{name:"logits = x₂[2]·Wout",cols:t.vocab,digits:3})}<span class="op">→ softmax →</span>${tinyVec(pr,{name:"p — the bet",cols:t.vocab,digits:3})}</div><p>The toy text loops — “the cat sat the cat sat…” — so the truth after “sat” is “the”, and the surprise is −ln ${num(pr[t.truth],3)} = <b>${num(-Math.log(pr[t.truth]),3)}</b>.</p>`)}
+${H4("All sixteen slots at once")}
+<p>Every slot makes its own bet in the same pass, and every slot has a truth: the next token in the window. So one ${CFG.context}-token window yields ${CFG.context} scored guesses, and the window's loss is their average surprise. That is the number step 10 pushes down.</p>
+${TODO(`<ol><li>Tap the two polish buttons and watch the strip change; note how many cells the clip zeroed.</li><li>Bet: drag the token you think the <em>trained</em> model will pick after ${q(w.tok)} onto the bet slot. It is judged after training.</li><li>Reveal the newborn's odds and read its loss.</li></ol>`)}`;},
   build(stage){
     const w=RUN.win,f=w.f,D=CFG.dModel,T=CFG.context,H=CFG.mlpHidden,V=RUN.V;
     const c=fwd0();let polish=0,bet=null,revealed=false;
@@ -3263,9 +3707,31 @@ const SCENES=[
 
 /* ---------------- 10 · Make it better ---------------- */
 {
-  label:"Train",grp:"Learn",eyebrow:"Step 10 · learn",needsText:true,
+  id:"train",dot:"10",label:"Train",grp:"Learn",eyebrow:"Step 10 · learn",needsText:true,
   title:"Make it better",
-  lede:"Nothing can change except the numbers. Try three of them by hand, then let calculus move them all at once — and watch the row you poured get answered.",
+  lede:"Nothing can change except the numbers. Try three of them by hand, then let calculus move all of them at once, a little at a time — and watch the row you poured get answered.",
+  primerTitle:"gradients, backpropagation, the update rule, and what the loss curve means",
+  primer(){const V=RUN.V,N=RUN.paramCount,fl=RUN.floors;const good=descentTable(0.25,6),bad=descentTable(1.1,4);return `
+<p>Everything so far was fixed arithmetic on random numbers, and the bet came out flat. Nothing about the <em>procedure</em> can change; only the ${N.toLocaleString()} numbers in E, P, Wq, Wk, Wv, Wo, W1, W2 and Wout can. <b>Training</b> means moving those numbers so that the loss falls.</p>
+${H4("The gradient: which way is down")}
+<p>Pick one number and nudge it up a little: the loss changes by some tiny amount. The ratio (change in loss) ÷ (change in the number) is that number's <b>gradient</b>. Positive means “increasing this number raises the loss”, so move it down; negative means move it up. Do this for every number at once and you have the direction in which the loss falls fastest.</p>
+<p>The gradients are not found by trial. <b>Backpropagation</b> applies the chain rule backwards through the exact forward pass you took apart — output, polish, residual, blend, softmax, scores, projections, embeddings — and produces all ${N.toLocaleString()} gradients in one sweep, at about the cost of one more forward pass. (The code that does it is in this page; a numerical check that it is right is in the repository's tests.)</p>
+${H4("The update")}
+${FORM(`w ← w − lr · ∂loss/∂w <span class="dim">— for every number w; lr is the learning rate (${CFG.lr} here)</span>`)}
+<p>Take a small step against the gradient, recompute, repeat. Too small a learning rate crawls; too large overshoots and diverges. This page uses <b>Adam</b>, plain gradient descent with two refinements: momentum (keep moving the way recent gradients agreed on) and a per-number step size (numbers whose gradients are always large take smaller steps).</p>
+${EX("Gradient descent on a single number",`<p>A loss you can see all of: loss(w) = (w − 3)², so the gradient is 2(w − 3). Start at w = 0 with lr = 0.25:</p>
+<div class="tblwrap"><table class="tbl"><tr><th>step</th>${good.map(r=>`<th class="num">${r.s}</th>`).join("")}</tr><tr><td>w</td>${good.map(r=>`<td class="num">${num(r.w,3)}</td>`).join("")}</tr><tr><td>loss</td>${good.map(r=>`<td class="num">${num(r.L,3)}</td>`).join("")}</tr><tr><td>gradient</td>${good.map(r=>`<td class="num">${num(r.g,3)}</td>`).join("")}</tr></table></div>
+<p>Each step halves the distance to the bottom. With lr = 1.1 the same start goes w = ${bad.map(r=>num(r.w,2)).join(" → ")}: every step overshoots further than the last. The learning rate matters.</p>`)}
+${H4("Batches and steps")}
+<p>Recomputing the loss over the whole text after every nudge would be slow, so each <b>training step</b> uses ${CFG.batch} random ${CFG.context}-token windows, averages their gradients, and applies one Adam update. ${CFG.steps.toLocaleString()} such steps train this model. The line in the chart is that noisy per-batch loss, smoothed.</p>
+${H4("Three floors to read the chart against")}
+<div class="tblwrap"><table class="tbl"><tr><th>if the model only knew…</th><th>best possible loss</th><th>on this text</th></tr>
+<tr><td>nothing — a coin toss over all ${V} tokens</td><td class="mono">ln V</td><td class="num">${fl.uniform.toFixed(2)}</td></tr>
+<tr><td>which tokens are common</td><td class="mono">unigram entropy</td><td class="num">${fl.unigram.toFixed(2)}</td></tr>
+<tr class="hl"><td>which token usually follows the previous one</td><td class="mono">bigram entropy — the dashed line</td><td class="num">${fl.bigram.toFixed(2)}</td></tr></table></div>
+<p>The dashed line is the one that matters: no predictor that sees only the previous token can get below it on this text. When the curve crosses it, the model is provably using earlier tokens — it is looking back.</p>
+${EX("A caution",`<p>On a text this small the model can nearly memorise it, which is why its loss can end far below the bigram floor and why it will say nothing new in step 12. Big models see each text roughly once and are judged on text they never saw; the mechanics are identical, the setting is not.</p>`,"k")}
+${TODO(`<ol><li>Three of the model's numbers are sliders. Move each until the loss with that number alone is lower than it started; the printed gradient tells you which way is down.</li><li>Then <b>hold to train</b> (or run to the end) and watch the loss curve, the live attention map, and your two sealed bets being judged.</li></ol>`)}`;},
   build(stage,token){
     const w=RUN.win,f=w.f,T=CFG.context,D=CFG.dModel,V=RUN.V,N=RUN.paramCount;
     const targets=w.ids.slice(1,T+1),win16=w.ids.slice(0,T);
@@ -3398,9 +3864,28 @@ const SCENES=[
 
 /* ---------------- 11 · Read its mind ---------------- */
 {
-  label:"Read its mind",grp:"Learn",eyebrow:"Step 11 · learn",needsText:true,
+  id:"mind",dot:"11",label:"Read its mind",grp:"Learn",eyebrow:"Step 11 · learn",needsText:true,
   title:"Read its mind",
-  lede:"Nobody told it where to look. Here is the whole attention map it learned — and your own row, next to the machine's.",
+  lede:"Nobody told it where to look. Here is the whole attention map it learned — and your own row, next to the machine's. Guess each row before you see it.",
+  primerTitle:"how to read an attention map, and the patterns real models learn",
+  primer(){const w=RUN.win,f=w.f,T=CFG.context;return `
+<p>Training moved every number, and among the things that changed are the ${T} rows of attention weights on your window. Nobody wrote a rule about where to look; the rows are whatever lowered the loss. This step shows the whole map — after you have guessed each row.</p>
+${H4("How to read an attention map")}
+<ul>
+<li>Rows ask, columns answer: row i holds slot i's weights over the columns, and it sums to 1.</li>
+<li>Darker = more weight. The hatched triangle is the card: exactly 0.</li>
+<li>A dark cell at (i, j) means slot i's blend was mostly slot j's value. It shows where information was <em>copied from</em>, not what “mattered” in a human sense — a weight is a mixing proportion, not an importance score.</li>
+</ul>
+${H4("Patterns that show up in real models")}
+<p>People have studied the maps of large models head by head. A few patterns recur, and you may spot small versions of them on your own text:</p>
+<ul>
+<li><b>Previous-token heads</b>: a dark line just below the diagonal — each slot reads the slot right before it.</li>
+<li><b>Induction heads</b>: when a word appears a second time, the head looks at the slot <em>after its first appearance</em> and copies what came next. That is exactly your round-2 game (“${esc(showTok(w.tok))} ${esc(showTok(w.a))} … ${esc(showTok(w.tok))} → ?”), and it is a large part of how big models learn from the examples in their prompt.</li>
+<li><b>First-token sinks</b>: many slots put weight on the very first token when they have nothing useful to look at — somewhere to park unused attention.</li>
+<li><b>Boundary heads</b>: weight on the last line break or comma, marking where the current phrase began.</li>
+</ul>
+<p>A one-head model has to do everything with one map, so its pattern is usually a compromise between such jobs. Multi-head models split the jobs across heads (see <b>Beyond this model</b>).</p>
+${TODO(`<p>For each lit row, tap the column you think the trained model leans on most, then confirm. Row ${f} is compared with the row you poured in step 4. After the last row, tap any cell for its receipt — the score, the exponentials and the share.</p>`)}`;},
   build(stage,token){
     const w=RUN.win,f=w.f,T=CFG.context;
     const go2=()=>{
@@ -3453,9 +3938,27 @@ const SCENES=[
 
 /* ---------------- 12 · Let it play ---------------- */
 {
-  label:"Let it play",grp:"Write",eyebrow:"Step 12 · write",needsText:true,
+  id:"play",dot:"12",label:"Let it play",grp:"Write",eyebrow:"Step 12 · write",needsText:true,
   title:"Let it play",
-  lede:"Cover and guess — now it's the model's turn, and it plays against itself: guess a token, append it, guess again.",
+  lede:"Cover and guess — now it's the model's turn, and it plays against itself: guess a token, append it, guess again. The wheel is its odds, drawn to scale; the temperature reshapes them before the draw.",
+  primerTitle:"autoregressive generation, sampling, and temperature",
+  primer(){const T=CFG.context;const p=[0.6,0.3,0.1];const at=t=>softmaxVec(p.map(x=>Math.log(x)/t));return `
+<p>Writing text is the guessing game played against itself: guess the next token, write it down, feed the longer text back in, guess again. This is <b>autoregressive generation</b>, and every chatbot reply is produced this way, one token at a time.</p>
+${H4("The loop")}
+<ol><li>Run the forward pass on the last ${T} tokens — the context window; older tokens fall off the left edge.</li><li>Take the last slot's odds: one probability per token in the vocabulary.</li><li>Choose one token from those odds and append it.</li><li>Repeat until a stop token or a length limit.</li></ol>
+${H4("How to choose: sampling and temperature")}
+<p>Always taking the most likely token (<b>greedy</b>, temperature 0) is deterministic and tends to fall into loops: the same context gives the same choice, which gives the same context again. <b>Sampling</b> draws a token at random in proportion to the odds — the wheel on this page does it literally: sector area = probability. The <b>temperature</b> T reshapes the odds before the draw:</p>
+${FORM(`p<sub>T</sub> = softmax(logits ÷ T) <span class="dim">— T &lt; 1 sharpens toward the top pick; T &gt; 1 flattens toward an even draw; T → 0 is greedy</span>`)}
+${EX("Three tokens, four temperatures",`<div class="tblwrap"><table class="tbl"><tr><th>temperature</th><th class="num">A</th><th class="num">B</th><th class="num">C</th></tr>
+<tr><td>the model's own odds (T = 1)</td>${p.map(x=>`<td class="num">${num(x,3)}</td>`).join("")}</tr>
+<tr><td>T = 0.5 — sharper</td>${at(0.5).map(x=>`<td class="num">${num(x,3)}</td>`).join("")}</tr>
+<tr><td>T = 2 — flatter</td>${at(2).map(x=>`<td class="num">${num(x,3)}</td>`).join("")}</tr>
+<tr><td>T = 0 — greedy</td><td class="num">1</td><td class="num">0</td><td class="num">0</td></tr></table></div>
+<p>Real systems add a cut-off as well: <b>top-k</b> keeps only the k most likely tokens, <b>top-p</b> keeps the smallest set whose odds add up to p, and the draw is made among those. Both stop the long tail of unlikely tokens from ever being picked.</p>`)}
+${H4("Why the same prompt gives different answers")}
+<p>Because of the draw. At T = 0 every run is identical; at T = 1 each run is a fresh sample from the same odds. Temperature is not “creativity”: a flatter draw is more varied and also more often wrong, and it adds no knowledge.</p>
+${EX("What real systems do to make this fast",`<p>Each new token needs a forward pass, but the keys and values of the earlier tokens do not change. Real systems keep them in a <b>KV cache</b> and compute only the new token's query, key and value, so the cost of each new token grows with the context length instead of with its square.</p>`,"k")}
+${TODO(`<p>Spin the wheel at T = 1, 0 and 2 (the counter shows what remains), tap a token it wrote to see its attention row, and try a prompt of your own. A word the model has never seen is refused — that refusal is its own lesson.</p>`)}`;},
   build(stage,token){
     const w=RUN.win,T=CFG.context,V=RUN.V;
     const go2=()=>{
@@ -3530,9 +4033,18 @@ const SCENES=[
 },
 /* ---------------- 13 · Three experiments ---------------- */
 {
-  label:"Experiments",grp:"Finish",dot:"★",eyebrow:"Extra · three experiments",needsText:true,autoDone:true,
+  id:"experiments",label:"Experiments",grp:"Extra",dot:"★",eyebrow:"Extra · three experiments",needsText:true,autoDone:true,
   title:"Three experiments on the model you trained",
-  lede:"Optional, and all live: swap a word and watch the prediction flip; meet the twin that was allowed to peek; see which words drifted together.",
+  lede:"Optional, and all live: two contexts with the same last words and different answers; the twin that was allowed to peek; and which words drifted together.",
+  primerTitle:"what each experiment tests",
+  primer(){return `
+<p>Three checks on the model you trained, each answering a question the earlier steps raised.</p>
+<ol>
+<li><b>Does it really look back?</b> Two contexts from your text end in the same two tokens but continue differently. A previous-word model would give both the same odds. If the trained model's odds flip, only the earlier words can be responsible. Tap a context to see which slot its last position read.</li>
+<li><b>What does the card protect?</b> A twin model was trained identically but without the causal mask. Its training loss looks better — it could peek — but judged honestly, with the future hidden as at writing time, it is worse, and its attention map has weight above the diagonal. Find it.</li>
+<li><b>Did the embeddings organise themselves?</b> For a few tokens, the nearest other strips in E (by cosine similarity, the angle between strips) at birth and after training. Judge against the text whether the trained neighbours play similar roles.</li>
+</ol>
+${TODO(`<p>Nothing to unlock. Poke at each experiment, then go on to the five lines and to what real models add.</p>`)}`;},
   build(stage,token){
     const w=RUN.win,T=CFG.context;
     coach("Nothing to unlock here — poke at what you built. Press <b>Next step</b> whenever you like.",true);
@@ -3613,21 +4125,21 @@ const SCENES=[
 
 /* ---------------- 14 · The whole machine ---------------- */
 {
-  label:"Whole machine",grp:"Finish",dot:"✓",eyebrow:"Finish · the whole machine",needsText:true,autoDone:true,
+  id:"whole",label:"Whole machine",grp:"Finish",dot:"✓",eyebrow:"Finish · the whole machine",needsText:true,autoDone:true,
   title:"Five lines. You did each one by hand.",
-  lede:"This is the entire model, written the way a paper would write it. Every symbol is something you dragged, poured, cut or spun.",
+  lede:"This is the entire model, written the way a paper would write it. Every symbol is something you dragged, poured, cut or spun. Tap a line to go back to the step that built it.",
   build(stage){
     const w=RUN.win,T=CFG.context,V=RUN.V,N=RUN.paramCount;
-    coach("Read the five lines. Then take it apart again on another text, if you like.",true);
+    coach("Read the five lines. The next two pages say what real models add to them, and collect every term on one sheet.",true);
     const eq=el("div","equations");
     const lines=[
-      [3,`x₀ = E[ids] + P`,`the strips you looked up, plus the slot's address`],
-      [5,`A = softmax(mask(<span class="q">Q</span><span class="k">Kᵀ</span> / √d))`,`query meets key, the card, the share-out — your poured row is one row of A`],
-      [8,`x₁ = x₀ + (A·<span class="v">V</span>)Wo`,`the blend of values, added back`],
-      [9,`x₂ = x₁ + relu(x₁W1)W2`,`the polish`],
-      [9,`p = softmax(x₂Wout)`,`the bet — and its surprise is the loss you drove down`],
+      ["lookup",`x₀ = E[ids] + P`,`the strips you looked up, plus the slot's address (step 3)`],
+      ["ask",`A = softmax(mask(<span class="q">Q</span><span class="k">Kᵀ</span> / √d))`,`query meets key (5), the card (6), the share-out (7) — your poured row is one row of A`],
+      ["blend",`x₁ = x₀ + (A·<span class="v">V</span>)Wo`,`the blend of values, added back (step 8)`],
+      ["bet",`x₂ = x₁ + relu(x₁W1)W2`,`the polish (step 9)`],
+      ["bet",`p = softmax(x₂Wout)`,`the bet (step 9) — and its surprise is the loss you drove down (step 10)`],
     ];
-    lines.forEach(([scene,f,cap])=>{const r=el("button","eqline");r.type="button";r.innerHTML=`<span class="f">${f}</span><span class="c">${cap}</span>`;r.addEventListener("click",()=>go(scene));eq.append(r);});
+    lines.forEach(([scene,f,cap])=>{const r=el("button","eqline");r.type="button";r.innerHTML=`<span class="f">${f}</span><span class="c">${cap}</span>`;r.addEventListener("click",()=>goTo(scene));eq.append(r);});
     stage.append(eq);
     stage.append(el("p","helper",`with <span class="q">Q</span> = x₀Wq, <span class="k">K</span> = x₀Wk, <span class="v">V</span> = x₀Wv, d = ${CFG.dModel}, and the loss = mean −log p(next token). Tap a line to revisit it.`));
     // artefacts
@@ -3646,14 +4158,142 @@ const SCENES=[
     if(RUN.generated)a2.append(el("div","helper","what it wrote"),el("div","poem gen",esc(RUN.generated.text)));
     a2.append(el("div","helper",`vocabulary ${V} · tokens ${RUN.ids.length} · parameters ${N.toLocaleString()} · steps ${CFG.steps.toLocaleString()}`));
     art.append(a2);
-    stage.append(el("div","card honest",`<h3>an honest note</h3><p>It stored no text; it moved ${N.toLocaleString()} numbers until the arithmetic reproduced this text's patterns. On a text this small that is close to memorising it — which is why it can't say anything new.</p><p><b>What GPT adds:</b> many attention heads per layer (each with its own Wq, Wk, Wv, looking for different things at once), dozens of stacked blocks (so a slot can look at what other slots already blended), layer normalisation, sub-word tokens instead of whole words, a context of thousands of slots instead of ${T}, and around 10¹¹ numbers instead of ${N.toLocaleString()} — trained on a good part of the written internet. None of the five lines changes.</p>`));
+    stage.append(el("div","card honest",`<h3>an honest note</h3><p>It stored no text; it moved ${N.toLocaleString()} numbers until the arithmetic reproduced this text's patterns. On a text this small that is close to memorising it — which is why it can't say anything new.</p><p><b>What GPT adds:</b> many attention heads per layer (each with its own Wq, Wk, Wv, looking for different things at once), dozens of stacked blocks (so a slot can look at what other slots already blended), layer normalisation, sub-word tokens instead of whole words, a context of thousands of slots instead of ${T}, and around 10¹¹ numbers instead of ${N.toLocaleString()} — trained on a good part of the written internet. None of the five lines changes. The next page, <span class="pill step" data-goto="beyond">Beyond this model</span>, goes through each of these additions in turn.</p>`));
     const btns=el("div","btnrow");const again=el("button","btn","Play again on another text");again.type="button";again.addEventListener("click",()=>go(0));
     const wipe=el("button","btn quiet small","Reset everything");wipe.type="button";wipe.addEventListener("click",()=>{try{Object.keys(localStorage).filter(k=>k.startsWith("lookback-")).forEach(k=>localStorage.removeItem(k));}catch(e){}location.reload();});
     btns.append(again,wipe);stage.append(btns);
     stage.append(el("p","helper",`Built for <a href="https://github.com/drdoubleb/attention-models">drdoubleb/attention-models</a>: the same model, in NumPy, renders the video series; this page runs it in your browser. Texts: public domain (Rossetti 1872, Dickens 1859, Blake 1794, traditional).`));
   }
 },
+
+/* ---------------- Beyond this model: what real transformers add ---------------- */
+{
+  id:"beyond",label:"Beyond this model",grp:"Finish",dot:"★",eyebrow:"Finish · what real models add",needsText:true,autoDone:true,
+  title:"What GPT adds — and what it doesn't",
+  lede:"Every large language model runs the five lines you built. The differences are size, repetition, and a handful of stabilisers. This page names each one, says why it exists, and shows the shapes.",
+  build(stage){
+    coach("A reading page. Every term on it is collected on the cheat sheet, one page on.",true);
+    const N=RUN.paramCount,D=CFG.dModel,T=CFG.context,w=RUN.win;
+    const L=el("div","lesson");stage.append(L);
+    L.innerHTML=`
+    <h3 class="big">1 · Several heads per layer</h3>
+    <p>Your model computes one attention map. A <b>multi-head</b> layer computes several at once, each with its own Wq, Wk and Wv, on a narrower slice of the strip:</p>
+    <ul><li>Split d = ${D} into h heads of d ÷ h numbers each — with 4 heads, ${D/4} numbers per head.</li><li>Each head makes its own queries, keys and values (${D} × ${D/4} matrices), its own scores, its own share-out and its own blend of ${D/4} numbers.</li><li>Concatenate the h blends back into a strip of ${D} numbers and pass it through Wo — the same Wo you tapped in step 8, now also the place where the heads are stitched together.</li></ul>
+    <div class="heads">${["the previous token","the same word, earlier","the start of the line","itself"].map((j,i)=>`<div class="hd h${i}"><b>head ${i}</b>looks at: ${j}</div>`).join("")}</div>
+    <p>Why: one map is one compromise. With several, different heads can specialise — the patterns listed in step 11 (previous-token, induction, first-token sink) are typically found in different heads of the same layer. Cost in parameters: none, because the per-head matrices are narrower; the total is still ${D} × ${D} per projection.</p>
+    ${FORM(`head<sub>k</sub> = softmax(mask(Q<sub>k</sub>K<sub>k</sub>ᵀ ÷ √(d ÷ h))) V<sub>k</sub> &nbsp;·&nbsp; attention output = [head<sub>1</sub> … head<sub>h</sub>] · Wo`)}
+
+    <h3 class="big">2 · Many layers, stacked</h3>
+    <p>Your model has one block: attention, then feed-forward. Real models stack dozens of identical blocks; the output x₂ of one is the input x₀ of the next.</p>
+    <div class="stack"><div class="blk">block 12 <small>attention · feed-forward</small></div><div class="blk">⋮</div><div class="blk">block 2 <small>attention · feed-forward</small></div><div class="blk">block 1 <small>attention · feed-forward — the one you built</small></div><div class="blk">x₀ = E[ids] + P <small>step 3</small></div></div>
+    <p>Why it matters: in block 1 a slot can only blend the <em>raw</em> strips of earlier tokens. In block 2 it blends strips that have <em>already</em> gathered information in block 1. That is how a clean induction head works: in block 1, a previous-token head writes into every slot which word came just before it; in block 2, the current ${q(w.tok)} can then search for “the slot whose previous word was ${q(w.tok)}” and copy that slot's own word — ${q(w.a)}. Two blocks do it cleanly; one block has to approximate it with a single map. Depth is composition.</p>
+    <p>The residual connection from step 8 is what makes a deep stack trainable: each block adds a correction to a strip that flows straight through from the embedding to the output.</p>
+
+    <h3 class="big">3 · Layer normalisation</h3>
+    <p>Before attention and before the feed-forward stage, each slot's strip is rescaled to have mean 0 and a fixed spread, then multiplied by a learned scale and offset. This keeps the numbers in every block in the same range however deep the stack, so the softmaxes stay soft and the learning rate that suits block 1 also suits block 40. A one-block model trains without it, which is why this page leaves it out.</p>
+    ${FORM(`LN(x) = (x − mean(x)) ÷ std(x) · γ + β <span class="dim">— per slot, over its d numbers; γ and β are learned</span>`)}
+
+    <h3 class="big">4 · Telling the model where a token is</h3>
+    <p>Step 3 added a learned strip per slot (P). Three families of positional information are in use:</p>
+    <div class="tblwrap"><table class="tbl"><tr><th>method</th><th>how</th><th>used by</th></tr>
+    <tr class="hl"><td>learned table</td><td>one learned strip per slot, added to the embedding — what you did</td><td>GPT-2, BERT</td></tr>
+    <tr><td>sinusoidal</td><td>fixed sine and cosine waves of different frequencies, one strip per slot, added to the embedding; no parameters</td><td>the original 2017 transformer</td></tr>
+    <tr><td>rotary (RoPE)</td><td>rotate each query and key by an angle proportional to its position, <em>inside</em> attention, so that a score depends on the <em>distance</em> between two slots rather than their absolute places</td><td>most current open models</td></tr></table></div>
+    <p>The point of the rotary form is that “look three slots back” is the same operation everywhere in a window of any length, which helps models cope with contexts longer than the ones they trained on.</p>
+
+    <h3 class="big">5 · Sub-word tokens</h3>
+    <p>Step 2 kept whole words, so a word not in your text has no row in E and cannot be represented at all — you saw this if you typed one into step 12. Real tokenizers (byte-pair encoding and its relatives) learn a vocabulary of 30k–200k <em>pieces</em>: common words stay whole, rare words split into familiar fragments, and any string of bytes can be spelled out. The Python pipeline in this repository trains a small BPE tokenizer and renders a video of it merging pairs.</p>
+
+    <h3 class="big">6 · Encoders, decoders and cross-attention</h3>
+    <p>The card (step 6) makes your model a <b>decoder</b>: it reads left to right and can generate. Remove the card and every slot sees the whole input — an <b>encoder</b>, good at classifying or labelling a finished text but unable to write it token by token. The original transformer was built for translation and used both:</p>
+    <ul><li>an encoder reads the source sentence with no mask;</li><li>a decoder writes the translation with the card, and in every block has a second attention stage — <b>cross-attention</b> — whose <span class="qtext">queries</span> come from the translation so far and whose <span class="ktext">keys</span> and <span class="vtext">values</span> come from the encoder's output.</li></ul>
+    <p>Same five lines; only where Q, K and V are taken from changes. GPT-style chat models are decoders only: the prompt and the reply live in one sequence, and the card is the only mask.</p>
+
+    <h3 class="big">7 · What it costs</h3>
+    <p>Every slot scores every slot: the score matrix is T × T, per head, per layer. Doubling the context quadruples that work and that memory.</p>
+    <div class="tblwrap"><table class="tbl"><tr><th>context T</th><th class="num">scores per head</th><th>example</th></tr>
+    <tr class="hl"><td class="num">${T}</td><td class="num">${(T*T).toLocaleString()}</td><td>this page</td></tr>
+    <tr><td class="num">1,024</td><td class="num">${(1024*1024).toLocaleString()}</td><td>GPT-2</td></tr>
+    <tr><td class="num">128,000</td><td class="num">${(128000*128000).toLocaleString()}</td><td>a current long-context model</td></tr></table></div>
+    <p>Generation is helped by the <b>KV cache</b> from step 12 (the keys and values of earlier tokens are computed once and kept). Training over long contexts relies on careful memory layouts (“flash attention”) and, in some models, on windows or sparse patterns so that not every slot scores every slot.</p>
+
+    <h3 class="big">8 · Size</h3>
+    <div class="tblwrap"><table class="tbl"><tr><th>model</th><th class="num">layers</th><th class="num">heads</th><th class="num">d</th><th class="num">context</th><th class="num">parameters</th></tr>
+    <tr class="hl"><td>this page, on ${esc(RUN.title)}</td><td class="num">1</td><td class="num">1</td><td class="num">${D}</td><td class="num">${T}</td><td class="num">${N.toLocaleString()}</td></tr>
+    <tr><td>GPT-2 small (2019)</td><td class="num">12</td><td class="num">12</td><td class="num">768</td><td class="num">1,024</td><td class="num">124 million</td></tr>
+    <tr><td>GPT-3 (2020)</td><td class="num">96</td><td class="num">96</td><td class="num">12,288</td><td class="num">2,048</td><td class="num">175 billion</td></tr></table></div>
+    <p>Where the numbers go: with d = 768 each attention projection is 768 × 768 ≈ 590,000 numbers, and each feed-forward stage widens to 4d = 3,072, so per block the feed-forward matrices hold about twice as much as attention. Multiply by the number of blocks, add the embedding table (50,257 × 768 ≈ 39 million), and you have GPT-2 small. Training data: your model saw one short text ${CFG.steps.toLocaleString()} times over; large models see trillions of tokens roughly once.</p>
+
+    <h3 class="big">9 · What stays the same</h3>
+    <p>Everything you did by hand. Look up and add positions; three summaries of every strip; query against key, divided by √d; hide the future; share out with softmax; blend the values; add back; polish; score every token; take the surprise; move every number a little against its gradient. The words <em>transformer</em>, <em>attention</em>, <em>head</em>, <em>layer</em>, <em>logit</em> and <em>temperature</em> mean on this page exactly what they mean in a paper.</p>
+
+    <h3 class="big">10 · Attention beyond text</h3>
+    <p>Nothing in the five lines knows that a token is a word. Cut an image into patches and embed each patch: a <b>vision transformer</b>. Embed short windows of audio: speech recognition. Embed the residues of a protein and let each attend to the others across the chain: the core of modern structure prediction. Wherever the items of a set need to exchange information in learned proportions, the same machinery applies.</p>
+
+    <h3 class="big">To go further</h3>
+    <ul>
+    <li>Vaswani et al., <i>Attention Is All You Need</i> (2017) — the original paper: encoder–decoder, multi-head, sinusoidal positions. <a href="https://arxiv.org/abs/1706.03762">arxiv.org/abs/1706.03762</a></li>
+    <li>Jay Alammar, <i>The Illustrated Transformer</i> — the same pictures as this page, drawn for the full model. <a href="https://jalammar.github.io/illustrated-transformer/">jalammar.github.io/illustrated-transformer</a></li>
+    <li>Andrej Karpathy, <i>nanoGPT</i> and the lecture <i>Let's build GPT</i> — a multi-head, multi-layer GPT in a few hundred lines of PyTorch; the natural next step after this page. <a href="https://github.com/karpathy/nanoGPT">github.com/karpathy/nanoGPT</a></li>
+    <li>Elhage et al., <i>A Mathematical Framework for Transformer Circuits</i> (2021) and Olsson et al., <i>In-context Learning and Induction Heads</i> (2022) — where the head patterns of step 11 come from. <a href="https://transformer-circuits.pub/2021/framework/index.html">transformer-circuits.pub</a></li>
+    <li>This repository's Python pipeline — the same model in NumPy with a BPE tokenizer, hand-derived gradients checked against finite differences, and the video series. <a href="https://github.com/drdoubleb/attention-models">github.com/drdoubleb/attention-models</a></li>
+    </ul>`;
+  }
+},
+
+/* ---------------- Cheat sheet: every symbol, shape and term ---------------- */
+{
+  id:"cheatsheet",label:"Cheat sheet",grp:"Finish",dot:"≡",eyebrow:"Finish · reference",needsText:true,autoDone:true,
+  title:"Every symbol, shape and term on one page",
+  lede:"A reference to come back to: the full forward pass with the shape of every intermediate, the terms this page uses, and the things people most often get wrong about attention.",
+  build(stage){
+    coach("Tap a step pill to jump back to the step where that piece was built.",true);
+    const D=CFG.dModel,T=CFG.context,V=RUN.V,H=CFG.mlpHidden,N=RUN.paramCount;
+    const pill=(id,label)=>`<span class="pill step" data-goto="${id}">${label}</span>`;
+    const rows=[
+      ["ids",`T = ${T}`,"the window's token ids","chop","step 2"],
+      ["E",`${V} × ${D}`,"token embedding table (learned)","lookup","step 3"],
+      ["P",`${T} × ${D}`,"positional embedding table (learned)","lookup","step 3"],
+      ["x₀",`${T} × ${D}`,"E[ids] + P — one strip per slot","lookup","step 3"],
+      ["Wq, Wk, Wv",`${D} × ${D} each`,"query, key and value projections (learned)","ask","step 5"],
+      ["Q, K, V",`${T} × ${D} each`,"x₀·Wq, x₀·Wk, x₀·Wv — three summaries of every strip","ask","step 5"],
+      ["S",`${T} × ${T}`,"Q·Kᵀ ÷ √d — scores; rows ask, columns answer","ask","step 5"],
+      ["mask","—","S[i][j] = −∞ for j > i, applied before softmax","card","step 6"],
+      ["A",`${T} × ${T}`,"softmax of each masked row — attention weights, rows sum to 1","share","step 7"],
+      ["C",`${T} × ${D}`,"A·V — each row a blend of the visible values","blend","step 8"],
+      ["Wo",`${D} × ${D}`,"output projection (learned)","blend","step 8"],
+      ["x₁",`${T} × ${D}`,"x₀ + C·Wo — residual","blend","step 8"],
+      ["W1, W2",`${D} × ${H}, ${H} × ${D}`,"feed-forward matrices (learned)","bet","step 9"],
+      ["x₂",`${T} × ${D}`,"x₁ + relu(x₁·W1)·W2 — residual","bet","step 9"],
+      ["Wout",`${D} × ${V}`,"projection to the vocabulary (learned)","bet","step 9"],
+      ["logits",`${T} × ${V}`,"x₂·Wout — one raw score per token, per slot","bet","step 9"],
+      ["p",`${T} × ${V}`,"softmax(logits) — odds on the next token, per slot","bet","step 9"],
+      ["loss","1",`mean over the ${T} slots of −ln p[slot][next token]`,"train","step 10"],
+      ["gradients","one per parameter",`∂loss ÷ ∂w for all ${N.toLocaleString()} numbers, by backpropagation`,"train","step 10"],
+    ];
+    const mistakes=[
+      ["“Attention weights show what the model thinks is important.”","They show mixing proportions: where a slot's blend was copied from. A slot can put weight on a token because it is useful, or because it is a convenient place to park attention it has no use for (the first-token sink)."],
+      ["“The model stores the text.”","It stores no text. It stores numbers that, run through the five lines, reproduce the text's statistics. On a very small text that amounts to memorising; on a large corpus it cannot."],
+      ["“Token ids mean something.”","An id is a row number. Everything the model knows about a token is in row id of E, and that row is learned."],
+      ["“The softmax output is the probability that the answer is correct.”","It is the model's odds, calibrated only as well as training made them. A model can be confidently wrong."],
+      ["“Higher temperature makes the model more creative.”","It flattens the draw. Higher temperature is more varied and more often wrong; it adds no knowledge."],
+      ["“The model looks at the previous word.”","It can look at any slot in its window, in learned proportions. Whether it favours the previous word is a pattern it found, not a rule it was given."],
+      ["“Attention is the whole model.”","Attention only moves information between slots. The embedding, the feed-forward stages and the output projection do the rest — and hold most of the parameters."],
+    ];
+    const L=el("div","lesson");stage.append(L);
+    L.innerHTML=`<h3 class="big">The forward pass, with shapes</h3>
+    <p>One window of ${T} tokens goes in; ${T} rows of odds come out. Every intermediate, in order:</p>
+    <div class="tblwrap"><table class="tbl"><tr><th>symbol</th><th>shape</th><th>what it is</th><th>built in</th></tr>${rows.map(([s,sh,d,id,n])=>`<tr><td class="mono">${s}</td><td class="mono">${sh}</td><td>${d}</td><td>${pill(id,n)}</td></tr>`).join("")}</table></div>
+    <p>Learned tables: E, P, Wq, Wk, Wv, Wo, W1, W2, Wout — ${N.toLocaleString()} numbers in all on this text. Everything else is computed from them and the ids, and every one of those computed numbers can be tapped for its receipt.</p>
+    <h3 class="big">Glossary</h3>
+    <dl class="gloss">${GLOSSARY.map(([term,def,id,n])=>`<dt>${term}</dt><dd>${def}${id?`<span class="where">${pill(id,n)}</span>`:""}</dd>`).join("")}</dl>
+    <h3 class="big">Common misreadings</h3>
+    ${mistakes.map(([a,b])=>`<div class="mistake"><b>${a}</b> ${b}</div>`).join("")}
+    <p class="helper">Back to the start: <span class="pill step" data-goto="intro">the big picture</span> · <span class="pill step" data-goto="pick">pick another text</span> · <span class="pill step" data-goto="whole">the five lines</span></p>`;
+  }
+},
 ];
+const PICK=sceneIdx("pick");
 
 /* ============================ boot ============================ */
 readPalette();
