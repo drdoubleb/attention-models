@@ -21,16 +21,31 @@ offline). To publish it the way the NGS tutorial is published, enable
 GitHub Pages for this repository (branch `main`, folder `/`); the page will
 then be served at `drdoubleb.com/attention-models`.
 
-You pick the training text first — the cat-and-dog story from the videos,
-Christina Rossetti's *Who Has Seen the Wind?*, the opening of *A Tale of Two
-Cities*, *The House That Jack Built*, Blake's *The Tyger*, or anything you
-paste — and every number on every later step comes from that text. A
-word-level transformer (d = 16, one block, one head, ~3–5k parameters)
-trains in the background in about ten seconds; the story is one continuous
-game played on one 16-token window of your text:
+The page opens with **The big picture**: what a language model does, why
+"looking back" is the whole problem, the pipeline in one diagram, the five
+lines of the model, the words the page uses (slot, strip, the card, pour,
+share out…) and how the controls work. Then you pick the training text —
+the cat-and-dog story from the videos, Christina Rossetti's *Who Has Seen
+the Wind?*, the opening of *A Tale of Two Cities*, *The House That Jack
+Built*, Blake's *The Tyger*, or anything you paste — and every number on
+every later step comes from that text. A word-level transformer (d = 16,
+one block, one head, ~3–5k parameters) trains in the background in about
+ten seconds; the story is one continuous game played on one 16-token
+window of your text.
+
+**Every step opens with a "Read first" lesson** above the interactive
+stage: the idea in plain words, why the model needs it, the math with its
+shapes, a worked example small enough to check on paper, and a "your turn"
+box saying exactly what to do. The worked examples run on a three-token
+toy model with strips of two numbers ("the cat sat", d = 2) whose every
+matrix, score, weight, blend and probability is computed live by the same
+code as the real model — never typed in. The lesson is collapsible, and the
+page remembers whether you keep it open.
 
 | # | Step | What you do |
 |---|------|-------------|
+| · | The big picture | Read what a language model is, why the next word needs earlier words, the pipeline diagram, the five lines, and how the page works |
+| · | Pick a text | Choose the text; see why it must be small and repetitive and what happens when you pick |
 | 1 | Cover & guess | Play next-token prediction yourself; lose at the slot where only *looking back* could have told you the answer |
 | 2 | Chop | Cut punctuation off word tiles with the scissors; bet which token gets id 0; count the vocabulary |
 | 3 | Look up | Fetch each slot's 16-number strip from the table E; notice two identical rows; drag position strips P onto them |
@@ -44,6 +59,9 @@ game played on one 16-token window of your text:
 | 11 | Read its mind | Predict-then-reveal rows of the learned attention map, your poured row beside the machine's |
 | 12 | Let it play | A proportional wheel spins on the model's odds; temperature 0 / 0.5 / 1 / 2; tap any generated token to see where it looked |
 | ★ | Experiments | Two contexts with the same last words and different answers; the unmasked "cheater" twin caught by its attention stripe; which words drifted together |
+| ✓ | Whole machine | The five lines, each linked to the step that built it, your artefacts, and an honest note |
+| ★ | Beyond this model | What real transformers add: multi-head attention, stacked layers, layer normalisation, positional encodings (learned / sinusoidal / rotary), sub-word tokens, encoders vs decoders and cross-attention, the T² cost and the KV cache, a size table (this page / GPT-2 / GPT-3), attention beyond text, and a reading list |
+| ≡ | Cheat sheet | Every intermediate of the forward pass with its shape and the step that built it, a glossary of ~50 terms with jump links, and the common misreadings of attention |
 
 Every drawn number can be tapped for its receipt (the formula with the real
 values that produced it); every sentence about the trained model is
